@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arsip Digital Polkeslu</title>
+<meta http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co; img-src 'self' data: https:;">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Fraunces:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f3ee;--card:#fff;--dark:#1c1c1e;--accent:#b5884a;
+  --a2:#5c8c78;--text:#1c1c1e;--muted:#888;
+  --bdr:rgba(0,0,0,.07);--danger:#e74c3c;--nav:#1c1c1e;
+  --sh:0 2px 12px rgba(0,0,0,.06);--inp:#f5f3ee;
+  --blue:#1a73e8;--blt:#e8f0fe;--grn:#34a853;--ora:#e67e22;
+}
+[data-theme=dark]{
+  --bg:#111113;--card:#1e1e22;--dark:#f0ede8;--text:#e8e4dd;--muted:#888;
+  --bdr:rgba(255,255,255,.08);--nav:#0a0a0c;
+  --sh:0 2px 12px rgba(0,0,0,.3);--inp:#2a2a2f;--blt:rgba(26,115,232,.1);
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+
+/* LOGIN OVERLAY z:3000 */
+.lo{position:fixed;inset:0;z-index:3000;background:linear-gradient(135deg,#0c0c14,#141420,#0c0c14);display:flex;align-items:center;justify-content:center;padding:16px}
+.lo.hidden{display:none}
+.lcard{width:100%;max-width:400px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:34px 30px;animation:fadeUp .35s cubic-bezier(.34,1.4,.64,1)}
+@keyframes fadeUp{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.llogo{font-family:'Fraunces',serif;font-size:22px;color:#fff;margin-bottom:3px}
+.llogo em{color:var(--accent);font-style:italic}
+.lsub{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:26px}
+.ll{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.4);margin-bottom:6px}
+.lfw{position:relative;margin-bottom:13px}
+.lfw input{width:100%;padding:12px 44px 12px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:#fff;outline:none;transition:border .2s,background .2s}
+.lfw input::placeholder{color:rgba(255,255,255,.25)}
+.lfw input:focus{border-color:rgba(181,136,74,.6);background:rgba(255,255,255,.09)}
+.lfw input.lerr-inp{border-color:rgba(231,76,60,.6)}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:15px;color:rgba(255,255,255,.4);padding:2px}
+.eye-btn:hover{color:rgba(255,255,255,.7)}
+.rpeek{display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600}
+.rpeek.on{display:inline-flex}
+.rp-admin{background:rgba(181,136,74,.2);color:#d4a86a}
+.rp-operator{background:rgba(26,115,232,.2);color:#74b2ff}
+.rp-viewer{background:rgba(52,168,83,.2);color:#6fcf97}
+.btn-login{width:100%;padding:13px;border-radius:11px;border:none;cursor:pointer;background:linear-gradient(135deg,#b5884a,#d4a86a);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;transition:opacity .2s,transform .15s;margin-top:4px}
+.btn-login:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+.btn-login:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.lerr-box{display:none;padding:10px 13px;background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);border-radius:9px;font-size:12px;color:#ff6b6b;margin-bottom:12px;text-align:center}
+.lerr-box.on{display:block}
+/* attempt meter */
+.abar{display:none;margin-top:11px}.abar.on{display:block}
+.adots{display:flex;gap:5px;margin-bottom:4px}
+.adot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.12);transition:background .3s}
+.adot.used{background:rgba(231,76,60,.7)}
+.atxt{font-size:11px;color:rgba(255,255,255,.4)}
+.atxt.warn{color:#f39c12}.atxt.crit{color:#e74c3c}
+/* lockout */
+.lkbox{display:none;margin-top:12px;padding:12px 14px;background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);border-radius:10px;text-align:center}
+.lkbox.on{display:block}
+.lktitle{font-size:13px;color:#ff6b6b;font-weight:500;margin-bottom:4px}
+.lkcd{font-family:monospace;font-size:22px;color:#fff;font-weight:700}
+/* demo creds */
+.demo-tog{width:100%;margin-top:14px;padding:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:rgba(255,255,255,.5);font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px}
+.demo-tog:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.7)}
+.demo-body{display:none;margin-top:8px;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px}
+.demo-body.on{display:block}
+.dcrow{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px}
+.dcrow:last-child{border-bottom:none}
+.dcuser{color:rgba(255,255,255,.7)}
+.dcinfo{display:flex;align-items:center;gap:7px}
+.dcpass{font-family:monospace;font-size:11px;color:rgba(255,255,255,.5)}
+
+/* SETUP OVERLAY z:1000 */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(12px);padding:12px;overflow-y:auto}
+.ov.hidden{display:none}
+.scard{background:var(--card);border-radius:22px;max-width:540px;width:100%;box-shadow:0 40px 100px rgba(0,0,0,.3);border:1px solid var(--bdr);animation:pop .3s cubic-bezier(.34,1.4,.64,1);overflow:hidden}
+@keyframes pop{from{transform:scale(.92) translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.sh{background:linear-gradient(135deg,#0c0c10,#1a1a22);padding:22px 26px 18px;display:flex;align-items:center;gap:14px}
+.shlogo{font-family:'Fraunces',serif;font-size:20px;color:#fff;line-height:1.2}
+.shlogo em{color:var(--accent);font-style:italic}
+.shlogo small{display:block;font-size:11px;color:rgba(255,255,255,.4);font-family:'Plus Jakarta Sans',sans-serif;font-style:normal;margin-top:2px}
+.scope-notice{display:flex;align-items:flex-start;gap:12px;margin:14px 22px 0;padding:12px 14px;border-radius:12px;background:rgba(52,168,83,.07);border:1px solid rgba(52,168,83,.25)}
+.sn-icon{font-size:20px;flex-shrink:0}
+.sn-title{font-size:12px;font-weight:600;color:#1e7e44;margin-bottom:3px}
+[data-theme=dark] .sn-title{color:#6fcf97}
+.sn-pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.sn-pill{display:inline-flex;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600}
+.sn-ok{background:rgba(52,168,83,.12);color:#1e7e44}
+[data-theme=dark] .sn-ok{background:rgba(52,168,83,.18);color:#6fcf97}
+.sn-no{background:rgba(136,136,136,.1);color:var(--muted);text-decoration:line-through}
+.stabs{display:flex;border-bottom:1px solid var(--bdr)}
+.stab{flex:1;padding:11px 6px;font-size:12px;font-weight:600;background:none;border:none;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s}
+.stab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.stab-body{display:none;padding:16px 22px 20px}
+.stab-body.active{display:block}
+.obox{display:flex;align-items:center;gap:8px;background:var(--blt);border:1px solid rgba(26,115,232,.2);border-radius:10px;padding:9px 12px;margin-bottom:10px}
+.obox span{font-family:monospace;font-size:12px;font-weight:700;color:var(--blue);flex:1;word-break:break-all}
+.ocopy{flex-shrink:0;padding:4px 10px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer}
+.drow{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;border:1px solid var(--bdr);background:var(--bg);transition:all .2s;margin-bottom:7px}
+.drow.ok{border-color:rgba(52,168,83,.3);background:rgba(52,168,83,.05)}
+.drow.fail{border-color:rgba(231,76,60,.3);background:rgba(231,76,60,.05)}
+.drow.warn{border-color:rgba(230,126,34,.3);background:rgba(230,126,34,.05)}
+.drow .di{font-size:17px;width:24px;text-align:center}
+.drow .dd{flex:1}.drow .dt{font-size:13px;font-weight:600}.drow .ds{font-size:11px;color:var(--muted);margin-top:1px;line-height:1.5}
+.drow .ds code{background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;font-size:10.5px;font-family:monospace}
+[data-theme=dark] .drow .ds code{background:rgba(255,255,255,.1)}
+.dbadge{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.dbadge.ok{background:var(--grn);color:#fff}.dbadge.fail{background:var(--danger);color:#fff}
+.dbadge.warn{background:var(--ora);color:#fff}.dbadge.spin{background:var(--blt);color:var(--blue);animation:spin .8s linear infinite}
+.dbadge.q{background:var(--bg);color:var(--muted);border:1px solid var(--bdr)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.recheck{width:100%;padding:9px;border-radius:9px;border:1px solid var(--bdr);background:var(--bg);color:var(--text);font-size:12px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s;margin-bottom:10px}
+.recheck:hover{border-color:var(--blue);color:var(--blue)}
+.fw{margin-bottom:12px}.fw label{display:block;font-size:12px;font-weight:600;margin-bottom:5px}
+.fiw{position:relative}
+.fiw input{width:100%;padding:11px 38px 11px 13px;border:1.5px solid var(--bdr);border-radius:10px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--inp);color:var(--text);outline:none;transition:border .2s}
+.fiw input:focus{border-color:var(--accent)}
+.fiw input.ok{border-color:var(--grn)}.fiw input.bad{border-color:var(--danger)}
+.fist{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none}
+.fh{font-size:11px;color:var(--muted);margin-top:3px}.fh.ok{color:var(--grn)}.fh.bad{color:var(--danger)}
+.priv-box{padding:10px 12px;border-radius:10px;margin-bottom:12px;background:var(--blt);border:1px solid rgba(26,115,232,.18);font-size:11px;color:var(--muted);line-height:1.7}
+.priv-box strong{color:var(--blue);font-size:12px;display:block;margin-bottom:3px}
+.priv-box ul{padding-left:15px}
+.ebox{display:none;margin-bottom:11px;background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.25);border-radius:10px;padding:11px 13px;font-size:12px;color:var(--danger);line-height:1.6}
+.ebox.on{display:block}
+.ebox strong{display:block;font-size:13px;margin-bottom:3px}
+.efix{margin-top:7px;padding:7px 9px;background:rgba(0,0,0,.03);border-radius:7px;color:var(--text);font-size:11px;line-height:1.8}
+.efix ol{padding-left:15px}
+[data-theme=dark] .efix{background:rgba(255,255,255,.04)}
+.btn-g{width:100%;padding:12px;border-radius:11px;border:none;cursor:pointer;background:linear-gradient(135deg,#4285F4,#1a73e8);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .2s;box-shadow:0 4px 16px rgba(26,115,232,.3);margin-bottom:7px}
+.btn-g:hover:not(:disabled){opacity:.92}.btn-g:disabled{opacity:.38;cursor:not-allowed}
+.skip{width:100%;padding:9px;border-radius:9px;border:1.5px solid var(--bdr);cursor:pointer;background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;transition:all .2s}
+.skip:hover{color:var(--text)}
+.gs{display:flex;gap:11px;padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid var(--bdr)}
+.gs:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.gsn{flex-shrink:0;width:25px;height:25px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#d4a862);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.gst{font-size:13px;font-weight:600;margin-bottom:3px}
+.gsd{font-size:12px;color:var(--muted);line-height:1.7}
+.gsd a{color:var(--blue);text-decoration:none}
+.gsd code{background:rgba(0,0,0,.06);padding:1px 5px;border-radius:4px;font-size:11px;font-family:monospace}
+[data-theme=dark] .gsd code{background:rgba(255,255,255,.1)}
+.gtag{display:inline-flex;align-items:center;gap:3px;margin-top:5px;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:600}
+.gtag.ok{background:rgba(52,168,83,.1);color:#1e7e44}.gtag.warn{background:rgba(230,126,34,.1);color:var(--ora)}
+[data-theme=dark] .gtag.ok{background:rgba(52,168,83,.18);color:#6fcf97}
+
+/* NAVBAR */
+nav{background:var(--nav);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200}
+.nav-logo{font-family:'Fraunces',serif;font-size:20px;color:#fff}
+.nav-logo em{color:var(--accent);font-style:italic}
+.nav-links{display:flex;gap:4px}
+.nav-links a{color:rgba(255,255,255,.55);text-decoration:none;font-size:13px;padding:7px 14px;border-radius:8px;transition:all .2s;cursor:pointer}
+.nav-links a:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-links a.active{background:rgba(181,136,74,.15);color:var(--accent)}
+.nav-links a.adm{color:rgba(181,136,74,.7)}
+.nav-links a.adm:hover{color:var(--accent);background:rgba(181,136,74,.1)}
+.nav-right{display:flex;align-items:center;gap:9px}
+.dtog{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.07);border:none;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+.nbell{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px}
+.nav-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--a2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;cursor:pointer}
+.nav-nm{font-size:13px;color:rgba(255,255,255,.6)}
+.rbadge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;border:1px solid}
+.rbadge.admin{color:#d4a86a;border-color:rgba(181,136,74,.35);background:rgba(181,136,74,.12)}
+.rbadge.operator{color:#74b2ff;border-color:rgba(26,115,232,.3);background:rgba(26,115,232,.1)}
+.rbadge.viewer{color:#6fcf97;border-color:rgba(52,168,83,.3);background:rgba(52,168,83,.1)}
+.tbadge{display:none;font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);font-weight:500}
+.tbadge.warn{color:#f39c12;border-color:rgba(243,156,18,.3)}
+.tbadge.crit{color:var(--danger);border-color:rgba(231,76,60,.3);animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.sinfo{display:none;font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.45)}
+.sinfo.warn{color:#f39c12;border-color:rgba(243,156,18,.25)}
+.sinfo.crit{color:var(--danger);border-color:rgba(231,76,60,.25)}
+
+/* DRIVE BANNER */
+.dbanner{background:rgba(52,168,83,.05);border:1px solid rgba(52,168,83,.2);border-radius:12px;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.ddot{width:8px;height:8px;border-radius:50%;background:var(--grn);flex-shrink:0;animation:pls 2s infinite}
+@keyframes pls{0%,100%{box-shadow:0 0 0 0 rgba(52,168,83,.4)}50%{box-shadow:0 0 0 5px rgba(52,168,83,0)}}
+.dbi{display:flex;align-items:center;gap:10px}
+.dbi span{font-size:13px;font-weight:500}
+.dbi small{font-size:11px;color:var(--muted);display:block}
+.dba{display:flex;gap:7px;flex-wrap:wrap}
+.stag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:11px;font-size:10px;font-weight:600;background:rgba(52,168,83,.12);color:#1e7e44}
+[data-theme=dark] .stag{background:rgba(52,168,83,.18);color:#6fcf97}
+
+/* LAYOUT */
+.container{max-width:1180px;margin:0 auto;padding:30px 24px}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.page-header h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600}
+.page-header p{font-size:13px;color:var(--muted);margin-top:3px}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 17px;border-radius:9px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;cursor:pointer;border:none;transition:all .2s;text-decoration:none}
+.btn-dark{background:var(--dark);color:var(--bg)}.btn-dark:hover{opacity:.85}
+.btn-out{background:var(--card);color:var(--text);border:1px solid var(--bdr)}.btn-out:hover{border-color:rgba(0,0,0,.2)}
+.btn-acc{background:var(--accent);color:#fff}.btn-acc:hover{opacity:.88}
+.bsm{padding:5px 11px;font-size:11px;border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
+.bund{background:#eafaf1;color:#1e8449}.bund:hover{background:#d5f5e3}
+.bhap{background:#fdecea;color:var(--danger)}.bhap:hover{background:#fadbd8}
+.bbuk{background:#e8f0fe;color:#1a73e8}.bbuk:hover{background:#d2e3fc}
+.bdrv{background:#fff;color:#1a73e8;border:1px solid #d2e3fc;font-weight:600}.bdrv:hover{background:#e8f0fe}
+[data-theme=dark] .bund{background:rgba(30,132,73,.18)}
+[data-theme=dark] .bhap{background:rgba(231,76,60,.18)}
+[data-theme=dark] .bbuk{background:rgba(26,115,232,.18);color:#74b2ff}
+[data-theme=dark] .bdrv{background:#1e2030;color:#74b2ff;border-color:#1a2a4a}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat{background:var(--card);border-radius:14px;padding:18px 20px;border:1px solid var(--bdr);position:relative;overflow:hidden;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s}
+.stat:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.09)}
+.stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.stat:nth-child(1)::after{background:var(--accent)}.stat:nth-child(2)::after{background:var(--a2)}
+.stat:nth-child(3)::after{background:#c07b7b}.stat:nth-child(4)::after{background:#7b8fc0}
+.st-top{display:flex;justify-content:space-between;align-items:flex-start}
+.st-em{font-size:22px}
+.st-sp{display:flex;align-items:flex-end;gap:2px;height:28px}
+.spk{width:5px;border-radius:2px}
+.st-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:10px 0 4px}
+.st-num{font-family:'Fraunces',serif;font-size:32px;color:var(--text);font-weight:600;line-height:1}
+.st-note{font-size:11px;color:var(--a2);margin-top:5px}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.cpanel{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:18px;box-shadow:var(--sh)}
+.cpanel h4{font-size:13px;font-weight:600;margin-bottom:12px}
+.cwrap{position:relative;height:180px}
+.grid2{display:grid;grid-template-columns:1fr 300px;gap:16px}
+.rcol{display:flex;flex-direction:column}
+.panel{background:var(--card);border-radius:14px;border:1px solid var(--bdr);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh)}
+.phead{padding:12px 18px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.phead h3{font-size:14px;font-weight:600}
+.tlbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.sbar{display:flex;align-items:center;gap:7px;background:var(--inp);border:1px solid var(--bdr);border-radius:8px;padding:6px 11px}
+.sbar input{border:none;background:transparent;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;width:120px;color:var(--text)}
+.srtsel{background:var(--inp);border:1px solid var(--bdr);border-radius:8px;padding:6px 9px;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);outline:none}
+.pills{display:flex;gap:7px;flex-wrap:wrap;padding:8px 18px 0}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:500;background:var(--card);border:1px solid var(--bdr);color:var(--muted);cursor:pointer;transition:all .2s}
+.pill:hover{border-color:var(--accent);color:var(--accent)}
+.pill.active{background:rgba(181,136,74,.1);border-color:var(--accent);color:var(--accent)}
+.pdot{width:6px;height:6px;border-radius:50%}
+.thead{display:grid;grid-template-columns:36px 1fr 90px 70px 80px 105px;gap:10px;padding:7px 18px;background:var(--bg);border-bottom:1px solid var(--bdr)}
+.th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.frow{display:grid;grid-template-columns:36px 1fr 90px 70px 80px 105px;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--bdr);transition:background .15s;cursor:pointer}
+.frow:last-child{border-bottom:none}
+.frow:hover{background:rgba(181,136,74,.04)}
+.fico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.f-pdf{background:#fdecea;color:#c0392b}.f-doc{background:#e8f4fd;color:#2471a3}.f-xls{background:#eafaf1;color:#1e8449}
+.f-img{background:#fef9e7;color:#b7950b}.f-zip{background:#f5eef8;color:#7d3c98}.f-gen{background:#f0f0f0;color:#555}
+[data-theme=dark] .f-pdf{background:rgba(192,57,43,.2)}[data-theme=dark] .f-doc{background:rgba(36,113,163,.2)}
+[data-theme=dark] .f-xls{background:rgba(30,132,73,.2)}[data-theme=dark] .f-img{background:rgba(183,149,11,.2)}
+[data-theme=dark] .f-zip{background:rgba(125,60,152,.2)}[data-theme=dark] .f-gen{background:rgba(80,80,80,.3)}
+.fnm{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.fmt2{font-size:10px;color:var(--muted);margin-top:2px}
+.fdt,.fsz{font-size:11px;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.bdrv2{background:rgba(26,115,232,.1);color:#1a73e8}
+.aksi{display:flex;gap:4px}
+.empty{padding:54px 20px;text-align:center;color:var(--muted)}
+.ei{font-size:44px;margin-bottom:11px;display:block}
+.empty p{font-size:14px;margin-bottom:4px;font-weight:500;color:var(--text)}
+.empty small{font-size:12px}
+.loading{padding:46px 20px;text-align:center}
+.spin2{width:30px;height:30px;border:3px solid var(--bdr);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 11px}
+.loading p{font-size:13px;color:var(--muted)}
+.pages{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid var(--bdr);font-size:12px;color:var(--muted)}
+.pbtns{display:flex;gap:4px}
+.pbtn{width:27px;height:27px;border-radius:7px;border:1px solid var(--bdr);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s}
+.pbtn:hover{border-color:var(--accent);color:var(--accent)}
+.pbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.upsec{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:18px;margin-bottom:14px;box-shadow:var(--sh)}
+.upsec h3{font-size:14px;font-weight:600;margin-bottom:12px}
+.upzone{border:2px dashed rgba(181,136,74,.35);border-radius:12px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:11px;position:relative}
+.upzone:hover:not(.off){border-color:var(--accent);background:rgba(181,136,74,.04)}
+.upzone.off{opacity:.4;pointer-events:none}
+.upzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.upico{font-size:22px;display:block;margin-bottom:6px}
+.upzone h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.upzone p{font-size:11px;color:var(--muted)}
+.fmts{display:flex;gap:5px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.fmtl{background:var(--bg);border:1px solid var(--bdr);border-radius:4px;padding:2px 7px;font-size:10px;color:var(--muted)}
+.fsel{background:#eafaf1;border:1px solid #a9dfbf;border-radius:8px;padding:9px 13px;font-size:12px;color:#1e8449;margin-bottom:10px;display:none;align-items:center;gap:8px}
+.fsel.on{display:flex}
+[data-theme=dark] .fsel{background:rgba(30,132,73,.15);border-color:rgba(30,132,73,.3)}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:12px;font-weight:500;margin-bottom:4px}
+.fg input,.fg textarea,.fg select{width:100%;padding:8px 11px;border:1px solid var(--bdr);border-radius:8px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--inp);color:var(--text);outline:none;transition:border .2s}
+.fg textarea{resize:none;height:50px}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--accent)}
+.uprog{display:none;margin-bottom:10px}
+.uprog.on{display:block}
+.plbl{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px}
+.pbar{height:4px;background:var(--bg);border-radius:2px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--a2),var(--accent));border-radius:2px;width:0;transition:width .2s}
+.drvsec{background:var(--card);border-radius:14px;border:1px solid #d2e3fc;padding:18px;margin-bottom:14px;box-shadow:var(--sh)}
+[data-theme=dark] .drvsec{border-color:#1a2a4a}
+.drvh{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.drvh h3{font-size:14px;font-weight:600}
+.drvh p{font-size:11px;color:var(--muted)}
+.drvcon{display:inline-flex;align-items:center;gap:4px;background:#eafaf1;color:#1e8449;border-radius:12px;padding:2px 8px;font-size:10px;font-weight:600;margin-left:auto}
+.drvi{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--bdr);gap:10px}
+.drvi:last-of-type{border-bottom:none}
+.drvii{display:flex;align-items:center;gap:10px}
+.drvnm{font-size:13px;font-weight:500}
+.drvmt{font-size:11px;color:var(--muted)}
+.drvall{width:100%;margin-top:12px;padding:8px;background:rgba(26,115,232,.06);border:1px solid #d2e3fc;border-radius:9px;color:#1a73e8;font-size:12px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.drvall:hover{background:rgba(26,115,232,.11)}
+[data-theme=dark] .drvall{background:rgba(116,178,255,.08);border-color:#1a2a4a;color:#74b2ff}
+.stgbox{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:16px 18px;margin-bottom:14px;box-shadow:var(--sh)}
+.stgt{font-size:12px;font-weight:600;margin-bottom:9px}
+.stgbar{height:7px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:7px}
+.stgf{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--a2),var(--accent));transition:width .5s}
+.stgmt{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.ait{display:flex;align-items:flex-start;gap:11px;padding:10px 18px;border-bottom:1px solid var(--bdr)}
+.ait:last-child{border-bottom:none}
+.adot2{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.atxt{font-size:12px;color:var(--text);line-height:1.5}
+.atm{font-size:10px;color:var(--muted);margin-top:1px}
+.lwarn{display:none;margin-top:9px;padding:9px 12px;background:rgba(181,136,74,.07);border-radius:8px;border:1px solid rgba(181,136,74,.22);font-size:12px;color:var(--accent);text-align:center}
+.lwarn a{color:var(--accent);font-weight:600;cursor:pointer;text-decoration:underline}
+
+/* SECURITY PANEL */
+.sec-panel{background:var(--card);border-radius:14px;border:1px solid rgba(52,168,83,.25);padding:18px;margin-bottom:14px;box-shadow:var(--sh);display:none}
+.sec-panel h3{font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.srow{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:12px}
+.srow:last-child{border-bottom:none}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sdot.ok{background:var(--grn)}.sdot.warn{background:var(--ora)}.sdot.fail{background:var(--danger)}
+.slbl{flex:1;color:var(--text)}
+.sval{font-size:11px;color:var(--muted);font-family:monospace}
+
+/* USER MANAGEMENT */
+.utbl{width:100%;border-collapse:collapse;margin-top:10px}
+.utbl th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:8px 10px;text-align:left;background:var(--bg);border-bottom:1px solid var(--bdr)}
+.utbl td{padding:9px 10px;border-bottom:1px solid var(--bdr);font-size:13px;color:var(--text);vertical-align:middle}
+.utbl tr:last-child td{border-bottom:none}
+.utbl tr:hover td{background:rgba(181,136,74,.03)}
+.utag{display:inline-flex;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600}
+.utag.admin{background:rgba(181,136,74,.15);color:#b5884a}
+.utag.operator{background:rgba(26,115,232,.12);color:#1a73e8}
+.utag.viewer{background:rgba(52,168,83,.12);color:#1e8449}
+.tsw{position:relative;width:36px;height:20px;cursor:pointer;display:inline-block}
+.tsw input{opacity:0;width:0;height:0;position:absolute}
+.ttrack{position:absolute;inset:0;background:rgba(136,136,136,.25);border-radius:20px;transition:background .2s}
+.tsw input:checked+.ttrack{background:var(--grn)}
+.tthumb{position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);pointer-events:none}
+.tsw input:checked~.tthumb{transform:translateX(16px)}
+.uform{display:none;border-top:1px solid var(--bdr);margin-top:14px;padding-top:14px}
+.uform.on{display:block}
+.ufgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.ufgrid .fg{margin-bottom:0}
+
+/* MODAL */
+.mover{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.mover.on{display:flex}
+.modal{background:var(--card);border-radius:20px;padding:26px;max-width:440px;width:90%;box-shadow:0 24px 80px rgba(0,0,0,.18);border:1px solid var(--bdr);animation:pop .25s ease}
+.modal.wide{max-width:680px}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:7px}
+.modal p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5}
+.mac{display:flex;gap:10px;justify-content:center}
+.bcan{background:var(--bg);color:var(--text);border:1px solid var(--bdr);padding:10px 20px;border-radius:9px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer}
+.bdel{background:var(--danger);color:#fff;border:none;padding:10px 20px;border-radius:9px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;font-weight:600}
+.dr{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px}
+.dr:last-child{border-bottom:none}
+.dk2{color:var(--muted);font-size:12px}
+.dv2{font-weight:500;color:var(--text);max-width:60%;text-align:right;word-break:break-word}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--dark);color:var(--bg);padding:11px 15px;border-radius:11px;font-size:13px;z-index:4000;transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);max-width:300px;display:flex;align-items:center;gap:8px;box-shadow:0 8px 28px rgba(0,0,0,.2)}
+.toast.on{transform:translateY(0);opacity:1}
+.toast.s{border-left:4px solid var(--a2)}.toast.e{border-left:4px solid var(--danger)}
+.toast.i{border-left:4px solid #1a73e8}.toast.w{border-left:4px solid var(--ora)}
+.stbtn{position:fixed;bottom:22px;left:22px;width:36px;height:36px;border-radius:50%;background:var(--dark);color:var(--bg);border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:all .3s;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.stbtn.on{opacity:1;transform:translateY(0)}
+footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-top:1px solid var(--bdr);margin-top:6px}
+@media(max-width:960px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .chart-row,.grid2{grid-template-columns:1fr}
+  .frow,.thead{grid-template-columns:36px 1fr 80px 100px}
+  .fdt,.fsz,.th:nth-child(3),.th:nth-child(4){display:none}
+  nav{padding:0 14px}.nav-links{display:none}
+  .container{padding:16px 12px}
+  .ufgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY z:3000 -->
+<div class="lo" id="lo">
+  <div class="lcard">
+    <div class="llogo">Arsip<em>Digital Polkeslu</em></div>
+    <div class="lsub">Masukkan kredensial untuk melanjutkan</div>
+    <div class="lerr-box" id="lerr"></div>
+    <label class="ll" for="luser">Username</label>
+    <div class="lfw">
+      <input type="text" id="luser" placeholder="Masukkan username" autocomplete="username"
+        oninput="onUserInput(this)" onkeydown="if(event.key==='Enter')document.getElementById('lpass').focus()">
+      <span class="rpeek" id="rpeek"></span>
+    </div>
+    <label class="ll" for="lpass">Password</label>
+    <div class="lfw">
+      <input type="password" id="lpass" placeholder="Masukkan password" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="eye-btn" onclick="togglePwd()" id="eyeBtn" title="Tampilkan/sembunyikan password">&#128065;</button>
+    </div>
+    <div class="abar" id="abar">
+      <div class="adots" id="adots"></div>
+      <div class="atxt" id="atxt"></div>
+    </div>
+    <div class="lkbox" id="lkbox">
+      <div class="lktitle">&#128274; Akun terkunci sementara</div>
+      <div class="lkcd" id="lkcd">15:00</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">Terlalu banyak percobaan gagal</div>
+    </div>
+    <button class="btn-login" id="btnLogin" onclick="doLogin()">Masuk</button>
+    <button class="demo-tog" onclick="toggleDemo()" id="demoTog">&#8505; Tampilkan kredensial default</button>
+    <div class="demo-body" id="demoBody">
+      <div class="dcrow">
+        <span class="dcuser">&#128100; admin</span>
+        <div class="dcinfo"><span class="dcpass">Admin@2026</span><span class="rbadge admin" style="font-size:9px">Admin</span></div>
+      </div>
+      <div class="dcrow">
+        <span class="dcuser">&#128100; operator</span>
+        <div class="dcinfo"><span class="dcpass">Oper@2026</span><span class="rbadge operator" style="font-size:9px">Operator</span></div>
+      </div>
+      <div class="dcrow">
+        <span class="dcuser">&#128100; viewer</span>
+        <div class="dcinfo"><span class="dcpass">View@2026</span><span class="rbadge viewer" style="font-size:9px">Viewer</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETUP OVERLAY z:1000 -->
+<div class="ov" id="ov">
+  <div class="scard">
+    <div class="sh">
+      <div style="font-size:28px">&#128194;</div>
+      <div class="shlogo">Arsip<em>Digital Polkeslu</em><small>Konfigurasi Supabase</small></div>
+    </div>
+    <div class="scope-notice">
+      <div class="sn-icon">&#128274;</div>
+      <div>
+        <div class="sn-title">Backend gratis: Supabase Storage + Database (tanpa OAuth)</div>
+        <div class="sn-pills">
+          <span class="sn-pill sn-ok">&#10003; Upload file</span>
+          <span class="sn-pill sn-ok">&#10003; Baca &amp; unduh file</span>
+          <span class="sn-pill sn-ok">&#10003; Hapus file</span>
+          <span class="sn-pill sn-ok">&#10003; 1GB storage gratis</span>
+        </div>
+      </div>
+    </div>
+    <div class="stabs">
+      <button class="stab active" onclick="switchTab(0)">&#128269; Diagnosa</button>
+      <button class="stab" onclick="switchTab(1)">&#128279; Hubungkan</button>
+      <button class="stab" onclick="switchTab(2)">&#128214; Panduan</button>
+    </div>
+    <div class="stab-body active" id="tab0">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Periksa semua prasyarat sebelum menghubungkan ke Supabase.</p>
+      <div id="diagGrid">
+        <div class="drow" id="d-prot"><div class="di">&#127760;</div><div class="dd"><div class="dt">Protokol HTTP/HTTPS</div><div class="ds" id="d-prot-s">Memeriksa...</div></div><div class="dbadge spin" id="d-prot-b">&#8635;</div></div>
+        <div class="drow" id="d-gis"><div class="di">&#128230;</div><div class="dd"><div class="dt">Supabase JS Library</div><div class="ds" id="d-gis-s">Memuat library...</div></div><div class="dbadge spin" id="d-gis-b">&#8635;</div></div>
+        <div class="drow" id="d-cid"><div class="di">&#128221;</div><div class="dd"><div class="dt">Project URL &amp; Anon Key</div><div class="ds" id="d-cid-s">Memeriksa...</div></div><div class="dbadge q" id="d-cid-b">?</div></div>
+        <div class="drow ok" id="d-scope"><div class="di">&#128274;</div><div class="dd"><div class="dt">Anon key (public, aman dipakai di browser)</div><div class="ds">Akses diatur lewat Row Level Security &#10003;</div></div><div class="dbadge ok">&#10003;</div></div>
+      </div>
+      <button class="recheck" onclick="runDiag()">&#8635; Jalankan Ulang Diagnosa</button>
+      <button class="btn btn-acc" style="width:100%;justify-content:center" onclick="switchTab(1)">Lanjut Masukkan URL &amp; Key &#8594;</button>
+    </div>
+    <div class="stab-body" id="tab1">
+      <div class="priv-box">
+        <strong>&#128203; Data yang diakses app ini</strong>
+        <ul><li>File yang diunggah via app ini, di bucket Storage kamu sendiri</li><li>Tabel metadata arsip (nama, kategori, pengunggah) di database kamu sendiri</li></ul>
+        <div style="margin-top:5px;font-size:10.5px">Project URL &amp; anon key disimpan di localStorage browser ini saja &#8212; anon key memang didesain aman untuk dipakai di sisi client selama RLS diaktifkan.</div>
+      </div>
+      <div class="fw">
+        <label>Supabase Project URL</label>
+        <div class="fiw">
+          <input type="text" id="cidInp" placeholder="https://xxxxxxxxxxxx.supabase.co" oninput="valCid(this)" autocomplete="off" spellcheck="false">
+          <span class="fist" id="cidSt"></span>
+        </div>
+        <div class="fh" id="cidHt">Temukan di Supabase Dashboard &#8594; Project Settings &#8594; API</div>
+      </div>
+      <div class="fw">
+        <label>Supabase anon (public) key</label>
+        <div class="fiw">
+          <input type="text" id="keyInp" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." oninput="valCid(document.getElementById('cidInp'))" autocomplete="off" spellcheck="false">
+          <span class="fist" id="keySt"></span>
+        </div>
+        <div class="fh">Project Settings &#8594; API &#8594; Project API keys &#8594; <code>anon</code> <code>public</code></div>
+      </div>
+      <div class="ebox" id="ebox"><strong id="etitle">Error</strong><span id="emsg"></span><div class="efix" id="efix" style="display:none"></div></div>
+      <button class="btn-g" id="btnGDrive" onclick="doSupaConnect()" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M11.9 1.1 3.3 13.9c-.4.6 0 1.4.7 1.4h7.1l-.9 7.6c-.1.9 1 1.4 1.5.6l8.6-12.8c.4-.6 0-1.4-.7-1.4h-7.1l.9-7.6c.1-.9-1-1.4-1.5-.6z" fill="#3ECF8E"/></svg>
+        Hubungkan ke Supabase
+      </button>
+      <button class="skip" onclick="modeOffline()">Lewati &#8212; mode offline</button>
+    </div>
+    <div class="stab-body" id="tab2" style="max-height:400px;overflow-y:auto">
+      <div class="gs"><div class="gsn">1</div><div><div class="gst">Buat akun &amp; project gratis</div><div class="gsd">Buka <a href="https://supabase.com" target="_blank">supabase.com</a> &#8594; Sign up &#8594; New Project (pilih region terdekat &amp; simpan database password)</div></div></div>
+      <div class="gs"><div class="gsn">2</div><div><div class="gst">Buat Storage bucket</div><div class="gsd">Menu <strong>Storage</strong> &#8594; New bucket &#8594; beri nama <code>arsip</code> &#8594; aktifkan <strong>Public bucket</strong> agar file bisa diunduh lewat link</div></div></div>
+      <div class="gs"><div class="gsn">3</div><div><div class="gst">Buat tabel metadata</div><div class="gsd">Menu <strong>SQL Editor</strong> &#8594; New query &#8594; jalankan skrip <code>arsip_files</code> pada tab Panduan SQL di bawah, lalu <strong>Run</strong></div><div class="gtag warn">&#9888; Wajib sebelum upload pertama</div></div></div>
+      <div class="gs"><div class="gsn">4</div><div><div class="gst">Aktifkan akses publik (RLS Policy)</div><div class="gsd">Tabel &amp; bucket baru default-nya terkunci. Skrip SQL di langkah 3 sudah menyertakan policy select/insert/delete dasar &#8212; sesuaikan jika perlu lebih ketat</div></div></div>
+      <div class="gs"><div class="gsn">5</div><div><div class="gst">Salin Project URL &amp; anon key</div><div class="gsd">Project Settings (ikon gerigi) &#8594; API &#8594; salin <strong>Project URL</strong> dan key <code>anon</code> <code>public</code>, tempel di tab Hubungkan</div><div class="gtag ok">&#10003; Tidak perlu OAuth, tidak perlu verifikasi</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo">Arsip<em>Pro</em></div>
+  <div class="nav-links">
+    <a class="active">Dashboard</a>
+    <a>Semua Arsip</a>
+    <a class="adm" id="navUsers" style="display:none" onclick="bukaUserMgmt()">&#128101; Pengguna</a>
+    <a onclick="bukaSecPanel()">&#128274; Keamanan</a>
+  </div>
+  <div class="nav-right">
+    <span class="sinfo" id="sinfo">&#8987; <span id="scd">&#8212;</span></span>
+    <span class="tbadge" id="tbadge">&#8212;</span>
+    <button class="dtog" onclick="toggleDark()" id="dBtn">&#127769;</button>
+    <div class="nbell" onclick="toast('Tidak ada notifikasi baru.','i')">&#128276;</div>
+    <span class="rbadge" id="navRB" style="display:none"></span>
+    <span class="nav-nm" id="navNm">&#8212;</span>
+    <div class="nav-av" id="navAv" onclick="openChangePwd()" title="Ganti Password" style="cursor:pointer">&#8212;</div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <div><h1>Dashboard Arsip</h1><p id="tglHari"></p></div>
+    <div class="btn-group">
+      <button class="btn btn-out" id="btnCsv" onclick="eksporCSV()">&#8595; CSV</button>
+      <button class="btn btn-out" onclick="muatArsip()">&#8635; Refresh</button>
+      <button class="btn btn-acc" onclick="scrollUp()">+ Tambah Arsip</button>
+    </div>
+  </div>
+
+  <div class="dbanner" id="dbanner" style="display:none">
+    <div class="dbi"><div class="ddot"></div>
+      <div><span id="drvUserInfo">Terhubung ke Supabase</span>
+        <small>Bucket: arsip &nbsp;&#183;&nbsp; <span class="stag">&#128274; Storage + DB</span></small>
+      </div>
+    </div>
+    <div class="dba">
+      <a href="#" id="dbanOpenLink" target="_blank" class="bsm bbuk">&#128194; Buka Bucket &#8599;</a>
+      <button class="bsm bhap" onclick="doSupaDisconnect()">Putuskan Koneksi</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="st-top"><span class="st-em">&#128193;</span><div class="st-sp" id="sp1"></div></div><div class="st-lbl">Total Arsip</div><div class="st-num" id="tot">0</div><div class="st-note">Via Supabase Storage</div></div>
+    <div class="stat"><div class="st-top"><span class="st-em">&#128193;</span><div class="st-sp" id="sp2"></div></div><div class="st-lbl">Kategori Arsip</div><div class="st-num" id="totKat">0</div><div class="st-note">Kategori berbeda</div></div>
+    <div class="stat"><div class="st-top"><span class="st-em">&#128228;</span><div class="st-sp" id="sp3"></div></div><div class="st-lbl">Diunggah Hari Ini</div><div class="st-num" id="totNew">0</div><div class="st-note">Sesi ini</div></div>
+    <div class="stat"><div class="st-top"><span class="st-em">&#128190;</span><div class="st-sp" id="sp4"></div></div><div class="st-lbl">Total Ukuran</div><div class="st-num" id="totSz" style="font-size:20px;padding-top:4px">&#8212;</div><div class="st-note">File app ini</div></div>
+  </div>
+
+  <div class="chart-row">
+    <div class="cpanel"><h4>&#128202; Distribusi Jenis File</h4><div class="cwrap"><canvas id="cJenis"></canvas></div></div>
+    <div class="cpanel"><h4>&#128197; Upload 7 Hari</h4><div class="cwrap"><canvas id="cMgg"></canvas></div></div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="panel">
+        <div class="phead">
+          <h3>&#128203; Daftar Arsip <span id="drvInd" style="font-size:10px;font-weight:400;color:#34a853;margin-left:5px"></span></h3>
+          <div class="tlbar">
+            <div class="sbar">&#128269; <input type="text" id="inpCari" placeholder="Cari arsip..." oninput="doFilter()"></div>
+            <select id="srtBy" class="srtsel" onchange="doFilter()">
+              <option value="terbaru">Terbaru</option>
+              <option value="terlama">Terlama</option>
+              <option value="nama">Nama A&#8211;Z</option>
+              <option value="ukuran">Ukuran</option>
+            </select>
+          </div>
+        </div>
+        <div class="pills">
+          <span class="pill active" onclick="setJenis(this,'semua')"><span class="pdot" style="background:var(--accent)"></span>Semua</span>
+          <span class="pill" onclick="setJenis(this,'PDF')"><span class="pdot" style="background:#c0392b"></span>PDF</span>
+          <span class="pill" onclick="setJenis(this,'DOC')"><span class="pdot" style="background:#2471a3"></span>Dokumen</span>
+          <span class="pill" onclick="setJenis(this,'XLS')"><span class="pdot" style="background:#1e8449"></span>Spreadsheet</span>
+          <span class="pill" onclick="setJenis(this,'IMG')"><span class="pdot" style="background:#b7950b"></span>Gambar</span>
+          <span class="pill" onclick="setJenis(this,'ZIP')"><span class="pdot" style="background:#7d3c98"></span>Zip</span>
+        </div>
+        <div class="thead"><div class="th"></div><div class="th">Nama File</div><div class="th">Tanggal</div><div class="th">Ukuran</div><div class="th">Tipe</div><div class="th">Aksi</div></div>
+        <div id="listArsip"></div>
+        <div class="pages"><span id="pgInfo"></span><div class="pbtns" id="pgBtns"></div></div>
+      </div>
+    </div>
+
+    <div class="rcol">
+      <div class="upsec" id="upSec">
+        <h3>&#128193; Upload Arsip ke Supabase</h3>
+        <div class="upzone off" id="upZone">
+          <input type="file" id="inpFile" onchange="onFileSelect()" accept="*/*">
+          <span class="upico">&#9729;</span>
+          <h4>Pilih atau Seret File</h4>
+          <p id="upHint">Hubungkan Supabase untuk mengunggah</p>
+          <div class="fmts"><span class="fmtl">PDF</span><span class="fmtl">DOCX</span><span class="fmtl">XLSX</span><span class="fmtl">JPG</span><span class="fmtl">ZIP</span></div>
+        </div>
+        <div class="fsel" id="fSelInfo">&#10003; <span id="fSelNm"></span></div>
+        <div class="uprog" id="upProg">
+          <div class="plbl"><span id="pLbl">Mengunggah...</span><span id="pPct">0%</span></div>
+          <div class="pbar"><div class="pfill" id="pFill"></div></div>
+        </div>
+        <div class="fg"><label>Nama Pengunggah</label><input type="text" id="inpUp" placeholder="Contoh: Budi Santoso"></div>
+        <div class="fg"><label>Kategori</label><input type="text" id="inpKat" placeholder="Misal: Laporan Keuangan Q1"></div>
+        <div class="fg"><label>Catatan (opsional)</label><textarea id="inpCat" placeholder="Keterangan tambahan..."></textarea></div>
+        <button class="btn btn-dark" style="width:100%;justify-content:center" id="btnSave" onclick="doUpload()">&#128274; Hubungkan Supabase dulu</button>
+        <div class="lwarn" id="lwarn">&#9888; <a onclick="document.getElementById('ov').classList.remove('hidden')">Hubungkan Supabase</a> untuk mengunggah</div>
+      </div>
+
+      <div class="drvsec">
+        <div class="drvh"><span style="font-size:22px">&#9889;</span><div style="flex:1"><h3>Supabase</h3><p>Storage + Database gratis</p></div><span class="drvcon" id="drvConBdg" style="display:none">&#9679; Live</span></div>
+        <div class="drvi"><div class="drvii"><span style="font-size:17px">&#128193;</span><div><div class="drvnm">Storage Bucket</div><div class="drvmt">Berkas arsip (bucket: arsip)</div></div></div><a href="#" id="lnkBucket" target="_blank" class="bsm bdrv">Buka &#8599;</a></div>
+        <div class="drvi"><div class="drvii"><span style="font-size:17px">&#128202;</span><div><div class="drvnm">Table Editor</div><div class="drvmt">Metadata arsip (arsip_files)</div></div></div><a href="#" id="lnkTable" target="_blank" class="bsm bdrv">Buka &#8599;</a></div>
+        <div class="drvi"><div class="drvii"><span style="font-size:17px">&#8987;</span><div><div class="drvnm">Project Dashboard</div><div class="drvmt">Kelola project Supabase</div></div></div><a href="#" id="lnkDash" target="_blank" class="bsm bdrv">Buka &#8599;</a></div>
+        <button class="drvall" onclick="window.open(document.getElementById('lnkDash').href,'_blank')">&#9889; Buka Dashboard Supabase &#8599;</button>
+      </div>
+
+      <div class="stgbox"><div class="stgt">&#128190; Estimasi Kapasitas Storage (Free 1GB)</div><div class="stgbar"><div class="stgf" id="stgFill" style="width:0%"></div></div><div class="stgmt"><span id="stgUsed">&#8212; terpakai</span><span id="stgTot">&#8212; total</span></div></div>
+
+      <!-- SECURITY PANEL -->
+      <div class="sec-panel" id="secPanel">
+        <h3>&#128274; Status Keamanan</h3>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Login app (username/password)</div><div class="sval">SHA-256 + salt</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Session storage</div><div class="sval">sessionStorage only</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Inactivity timeout</div><div class="sval">30 menit</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Brute-force lock</div><div class="sval">5 try / 15 min</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Role-based access (RBAC)</div><div class="sval" id="secRoleVal">&#8212;</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Backend penyimpanan</div><div class="sval">Supabase Storage + Postgres</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Kredensial Supabase</div><div class="sval">Anon key (public) di localStorage</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Content Security Policy</div><div class="sval">meta CSP header</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Input sanitization</div><div class="sval">escH() / escA()</div></div>
+        <div style="margin-top:12px;display:flex;gap:7px;flex-wrap:wrap">
+          <button class="bsm bhap" onclick="doAppLogout()">&#128682; Logout App</button>
+          <button class="bsm bbuk" onclick="openChangePwd()">&#128273; Ganti Password</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="phead"><h3>&#128336; Aktivitas Terbaru</h3><span style="font-size:11px;color:var(--muted)" id="jmlAkt">0 kegiatan</span></div>
+        <div id="aktBox"><div class="empty" style="padding:20px"><span style="font-size:20px">&#128336;</span><p style="font-size:12px;margin-top:7px;font-weight:400">Belum ada aktivitas</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>&copy; 2026 Arsip Digital Polkeslu &nbsp;&#183;&nbsp; SHA-256 Auth &nbsp;&#183;&nbsp; RBAC (Admin/Operator/Viewer) &nbsp;&#183;&nbsp; Supabase Storage</footer>
+<div class="toast" id="toastEl"></div>
+<button class="stbtn" id="stBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+
+<!-- MODAL HAPUS FILE -->
+<div class="mover" id="mHapus"><div class="modal" style="text-align:center"><div style="font-size:36px;margin-bottom:11px">&#128465;</div><h3>Hapus Arsip?</h3><p id="mHapusTxt">File akan dihapus permanen.</p><div class="mac"><button class="bcan" onclick="closeModal('mHapus')">Batal</button><button class="bdel" onclick="confirmHapus()">Ya, Hapus</button></div></div></div>
+
+<!-- MODAL DETAIL FILE -->
+<div class="mover" id="mDetail">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px">
+      <div><div id="dtIco" style="font-size:28px;margin-bottom:7px"></div><h3 id="dtNm" style="font-size:15px;word-break:break-word;max-width:320px"></h3></div>
+      <button onclick="closeModal('mDetail')" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&#215;</button>
+    </div>
+    <div id="dtRows" style="margin:12px 0"></div>
+    <div class="mac" style="justify-content:flex-start;gap:7px;margin-top:6px">
+      <a id="dtBuka" href="#" target="_blank" class="bsm bbuk" style="padding:7px 12px;font-size:12px">&#8599; Buka</a>
+      <a id="dtUnduh" href="#" class="bsm bund" style="padding:7px 12px;font-size:12px">&#8595; Unduh</a>
+      <button id="dtHapus" class="bsm bhap" style="padding:7px 12px;font-size:12px;display:none">&#128465; Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MANAJEMEN PENGGUNA -->
+<div class="mover" id="mUsers">
+  <div class="modal wide">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <h3 style="margin:0">&#128101; Manajemen Pengguna</h3>
+      <button onclick="closeModal('mUsers')" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&#215;</button>
+    </div>
+    <div style="overflow-x:auto;max-height:260px;overflow-y:auto">
+      <table class="utbl" id="utbl">
+        <thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Login Terakhir</th><th>Aktif</th><th>Aksi</th></tr></thead>
+        <tbody id="utbody"></tbody>
+      </table>
+    </div>
+    <div class="uform" id="uForm">
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px" id="uFormTitle">Tambah Pengguna</div>
+      <div class="ufgrid">
+        <div class="fg"><label>Username</label><input type="text" id="ufUser" placeholder="username" autocomplete="off"></div>
+        <div class="fg"><label>Nama Lengkap</label><input type="text" id="ufName" placeholder="Nama Lengkap"></div>
+        <div class="fg"><label>Password</label><input type="password" id="ufPass" placeholder="Min. 8 karakter" autocomplete="new-password"></div>
+        <div class="fg"><label>Role</label>
+          <select id="ufRole">
+            <option value="viewer">Viewer &#8212; lihat &amp; download saja</option>
+            <option value="operator">Operator &#8212; upload, lihat, hapus file</option>
+            <option value="admin">Admin &#8212; akses penuh + kelola pengguna</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-dark" style="flex:1;justify-content:center" onclick="simpanUser()">&#128190; Simpan</button>
+        <button class="bcan" onclick="batalForm()">Batal</button>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn btn-acc" onclick="showAddForm()">+ Tambah Pengguna</button>
+      <button class="bcan" onclick="closeModal('mUsers')">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GANTI PASSWORD -->
+<div class="mover" id="mCPwd">
+  <div class="modal">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <h3 style="margin:0">&#128273; Ganti Password</h3>
+      <button onclick="closeModal('mCPwd')" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&#215;</button>
+    </div>
+    <div class="fg"><label>Password Lama</label><input type="password" id="cpOld" placeholder="Password saat ini" autocomplete="current-password"></div>
+    <div class="fg"><label>Password Baru</label><input type="password" id="cpNew" placeholder="Min. 8 karakter + angka" autocomplete="new-password"></div>
+    <div class="fg"><label>Konfirmasi Password Baru</label><input type="password" id="cpConf" placeholder="Ulangi password baru" autocomplete="new-password"></div>
+    <div class="ebox" id="cpErr" style="margin-bottom:10px"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-dark" style="flex:1;justify-content:center" onclick="doChangePwd()">&#128190; Simpan</button>
+      <button class="bcan" onclick="closeModal('mCPwd')">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI HAPUS USER -->
+<div class="mover" id="mDelUser"><div class="modal" style="text-align:center"><div style="font-size:36px;margin-bottom:11px">&#128465;</div><h3>Hapus Pengguna?</h3><p id="mDelTxt">Pengguna ini akan dihapus permanen.</p><div class="mac"><button class="bcan" onclick="closeModal('mDelUser')">Batal</button><button class="bdel" onclick="confirmDelUser()">Ya, Hapus</button></div></div></div>
+
+<script>window._G={ready:false,err:false};</script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"
+  onload="window._G.ready=true;onGisOK()"
+  onerror="window._G.err=true;onGisErr()"></script>
+
+<script>
+// ═══════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════
+const BUCKET='arsip';
+const TABLE='arsip_files';
+const QUOTA_BYTES=1024*1024*1024; // 1GB Supabase free tier
+const SESS_TTL=8*60*60*1000;
+const INACT_TTL=30*60*1000;
+const MAX_FAILS=5;
+const LOCK_MS=15*60*1000;
+const SALT='ArsipPolkeslu2026!';
+const RL={'admin':'Admin','operator':'Operator','viewer':'Viewer'};
+
+// ═══════════════════════════════════
+// CRYPTO
+// ═══════════════════════════════════
+async function hashPwd(p){
+  const d=new TextEncoder().encode(p+SALT);
+  const b=await crypto.subtle.digest('SHA-256',d);
+  return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+
+// ═══════════════════════════════════
+// USER STORE
+// ═══════════════════════════════════
+const getUsers=()=>JSON.parse(localStorage.getItem('arsipUsers')||'[]');
+const saveUsers=u=>localStorage.setItem('arsipUsers',JSON.stringify(u));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+
+async function initUsers(){
+  if(getUsers().length>0) return;
+  const defs=[
+    {username:'admin',   password:'Admin@2026', role:'admin',    name:'Administrator'},
+    {username:'operator',password:'Oper@2026',  role:'operator', name:'Operator Arsip'},
+    {username:'viewer',  password:'View@2026',  role:'viewer',   name:'Pengguna Viewer'},
+  ];
+  const hashed=await Promise.all(defs.map(async u=>({
+    id:uid(),username:u.username,passwordHash:await hashPwd(u.password),
+    role:u.role,name:u.name,active:true,
+    createdAt:new Date().toISOString(),lastLogin:null,
+  })));
+  saveUsers(hashed);
+}
+
+async function authUser(username,password){
+  const users=getUsers();
+  const u=users.find(x=>x.username===username&&x.active);
+  if(!u) return null;
+  const h=await hashPwd(password);
+  if(h!==u.passwordHash) return null;
+  u.lastLogin=new Date().toISOString();
+  saveUsers(users);
+  return u;
+}
+
+// ═══════════════════════════════════
+// SESSION
+// ═══════════════════════════════════
+const mkSess=u=>{const s={userId:u.id,username:u.username,name:u.name,role:u.role,loginAt:Date.now(),expiresAt:Date.now()+SESS_TTL,lastActivity:Date.now()};sessionStorage.setItem('arsipSess',JSON.stringify(s));return s;};
+function getSess(){const r=sessionStorage.getItem('arsipSess');if(!r) return null;const s=JSON.parse(r);if(Date.now()>s.expiresAt||Date.now()-s.lastActivity>INACT_TTL){clearSess();return null;}s.lastActivity=Date.now();sessionStorage.setItem('arsipSess',JSON.stringify(s));return s;}
+const clearSess=()=>sessionStorage.removeItem('arsipSess');
+
+// ═══════════════════════════════════
+// BRUTE FORCE
+// ═══════════════════════════════════
+const getF=()=>JSON.parse(localStorage.getItem('arsipFail')||'{"count":0,"until":0}');
+const saveF=d=>localStorage.setItem('arsipFail',JSON.stringify(d));
+function resetF(){saveF({count:0,until:0});}
+function isLocked(){const d=getF();if(d.until>Date.now()) return true;if(d.until>0&&d.until<=Date.now()){resetF();return false;}return false;}
+function recFail(){const d=getF();d.count=(d.count||0)+1;if(d.count>=MAX_FAILS){d.until=Date.now()+LOCK_MS;d.count=0;}saveF(d);return d;}
+
+// ═══════════════════════════════════
+// ROLE CHECKS
+// ═══════════════════════════════════
+let _sess=null;
+const canUp=()=>['admin','operator'].includes(_sess?.role);
+const canDel=()=>['admin','operator'].includes(_sess?.role);
+const canMgr=()=>_sess?.role==='admin';
+const canExp=()=>['admin','operator'].includes(_sess?.role);
+const canDrv=()=>['admin','operator'].includes(_sess?.role);
+
+// ═══════════════════════════════════
+// LOGIN UI
+// ═══════════════════════════════════
+function onUserInput(inp){
+  const u=getUsers().find(x=>x.username===inp.value.trim()&&x.active);
+  const p=document.getElementById('rpeek');
+  if(u){p.className='rpeek on rp-'+u.role;p.textContent=RL[u.role];}
+  else{p.className='rpeek';p.textContent='';}
+}
+function togglePwd(){const i=document.getElementById('lpass'),b=document.getElementById('eyeBtn');if(i.type==='password'){i.type='text';b.innerHTML='&#128584;';}else{i.type='password';b.innerHTML='&#128065;';}}
+function toggleDemo(){const d=document.getElementById('demoBody'),b=document.getElementById('demoTog');const on=d.classList.toggle('on');b.innerHTML=on?'&#9650; Sembunyikan kredensial':'&#8505; Tampilkan kredensial default';}
+const showLErr=m=>{const e=document.getElementById('lerr');e.textContent=m;e.classList.add('on');};
+const hideLErr=()=>document.getElementById('lerr').classList.remove('on');
+
+function updABar(){
+  const d=getF();const bar=document.getElementById('abar');
+  if(d.count===0){bar.classList.remove('on');return;}
+  bar.classList.add('on');
+  document.getElementById('adots').innerHTML=Array.from({length:MAX_FAILS},(_,i)=>`<div class="adot${i<d.count?' used':''}"></div>`).join('');
+  const rem=MAX_FAILS-d.count;
+  const txt=document.getElementById('atxt');
+  txt.className='atxt'+(rem<=2?' crit':rem<=3?' warn':'');
+  txt.textContent=`${d.count} percobaan gagal — ${rem} tersisa sebelum akun terkunci`;
+}
+
+let _lkInt=null;
+function startLock(){
+  const d=getF();if(!d.until||d.until<=Date.now()) return;
+  const box=document.getElementById('lkbox'),cd=document.getElementById('lkcd'),btn=document.getElementById('btnLogin');
+  box.classList.add('on');btn.disabled=true;
+  _lkInt=setInterval(()=>{
+    const rem=d.until-Date.now();
+    if(rem<=0){clearInterval(_lkInt);box.classList.remove('on');btn.disabled=false;resetF();updABar();return;}
+    const m=Math.floor(rem/60000),s=String(Math.floor((rem%60000)/1000)).padStart(2,'0');
+    cd.textContent=`${m}:${s}`;
+  },1000);
+}
+
+async function doLogin(){
+  hideLErr();
+  const u=document.getElementById('luser').value.trim();
+  const p=document.getElementById('lpass').value;
+  if(!u||!p){showLErr('Isi username dan password.');return;}
+  if(isLocked()){startLock();return;}
+  document.getElementById('btnLogin').disabled=true;
+  document.getElementById('btnLogin').textContent='Memverifikasi...';
+  try{
+    const user=await authUser(u,p);
+    if(!user){
+      const d=recFail();updABar();
+      document.getElementById('lpass').classList.add('lerr-inp');
+      showLErr('Username atau password salah.');
+      if(d.count>=MAX_FAILS||d.until>Date.now()) startLock();
+      document.getElementById('btnLogin').disabled=false;
+      document.getElementById('btnLogin').textContent='Masuk';
+      return;
+    }
+    resetF();updABar();
+    document.getElementById('lpass').classList.remove('lerr-inp');
+    _sess=mkSess(user);
+    document.getElementById('lo').classList.add('hidden');
+    onSessStart();
+  }catch(e){
+    showLErr('Terjadi kesalahan. Coba lagi.');
+    document.getElementById('btnLogin').disabled=false;
+    document.getElementById('btnLogin').textContent='Masuk';
+  }
+}
+
+// ═══════════════════════════════════
+// SESSION START / STOP
+// ═══════════════════════════════════
+function onSessStart(){
+  const rb=document.getElementById('navRB');
+  rb.textContent=RL[_sess.role];rb.className='rbadge '+_sess.role;rb.style.display='inline-flex';
+  document.getElementById('navNm').textContent=_sess.name.split(' ')[0];
+  const ini=_sess.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('navAv').textContent=ini;
+  document.getElementById('navUsers').style.display=canMgr()?'':'none';
+  document.getElementById('btnCsv').style.display=canExp()?'':'none';
+  document.getElementById('secPanel').style.display='block';
+  document.getElementById('secRoleVal').textContent=RL[_sess.role];
+  startSessTimer();
+  addAkt(`${_sess.name} login sebagai ${RL[_sess.role]}`,'#34a853');
+  applyRoleUI();
+  renderList();updChart();drawSparks();
+  initInact();
+}
+
+function applyRoleUI(){
+  if(!canUp()){
+    document.getElementById('upZone').classList.add('off');
+    document.getElementById('upZone').title='Role '+RL[_sess.role]+' tidak dapat mengunggah';
+  }
+  document.getElementById('btnSave').innerHTML=canUp()?'&#9729; Unggah ke Supabase':'&#128274; Role ini tidak dapat mengunggah';
+}
+
+let _stInt=null;
+function startSessTimer(){
+  clearInterval(_stInt);
+  const el=document.getElementById('sinfo'),cd=document.getElementById('scd');
+  el.style.display='inline';
+  _stInt=setInterval(()=>{
+    const s=getSess();
+    if(!s){clearInterval(_stInt);onSessExpire();return;}
+    const left=Math.min(s.expiresAt,s.lastActivity+INACT_TTL)-Date.now();
+    if(left<=0){clearInterval(_stInt);onSessExpire();return;}
+    const m=Math.floor(left/60000),sc=String(Math.floor((left%60000)/1000)).padStart(2,'0');
+    cd.textContent=`${m}:${sc}`;
+    el.className='sinfo'+(left<5*60000?' crit':left<10*60000?' warn':'');
+  },1000);
+}
+
+function onSessExpire(){clearSess();_sess=null;toast('&#9200; Sesi berakhir &#8212; login ulang.','w');setTimeout(()=>document.getElementById('lo').classList.remove('hidden'),1200);}
+
+function doAppLogout(){
+  clearSess();_sess=null;clearInterval(_stInt);
+  document.getElementById('sinfo').style.display='none';
+  document.getElementById('lo').classList.remove('hidden');
+  document.getElementById('luser').value='';document.getElementById('lpass').value='';
+  addAkt('Logout dari aplikasi','#c0392b');
+  toast('&#128682; Berhasil logout.','i');
+}
+
+function initInact(){
+  ['mousemove','keydown','click','scroll','touchstart'].forEach(ev=>{
+    document.addEventListener(ev,()=>{getSess();},{passive:true});
+  });
+}
+
+// ═══════════════════════════════════
+// USER MANAGEMENT
+// ═══════════════════════════════════
+let _editId=null,_delUid=null;
+
+function bukaUserMgmt(){
+  if(!canMgr()){toast('&#9940; Hanya Admin.','e');return;}
+  renderUTable();document.getElementById('uForm').classList.remove('on');
+  document.getElementById('mUsers').classList.add('on');
+}
+
+function renderUTable(){
+  const users=getUsers();
+  document.getElementById('utbody').innerHTML=users.map(u=>`
+  <tr>
+    <td><strong>${escH(u.username)}</strong></td>
+    <td>${escH(u.name)}</td>
+    <td><span class="utag ${u.role}">${RL[u.role]}</span></td>
+    <td style="font-size:11px;color:var(--muted)">${u.lastLogin?fTgl(u.lastLogin.split('T')[0]):'Belum pernah'}</td>
+    <td>
+      <label class="tsw">
+        <input type="checkbox" ${u.active?'checked':''} onchange="toggleUser('${u.id}',this.checked)" ${u.id===_sess?.userId?'disabled title=Diri sendiri':''}>
+        <div class="ttrack"></div><div class="tthumb"></div>
+      </label>
+    </td>
+    <td><div style="display:flex;gap:5px">
+      <button class="bsm bbuk" onclick="editUser('${u.id}')" ${u.id===_sess?.userId?'disabled':''}>&#9999;</button>
+      <button class="bsm bhap" onclick="askDelUser('${u.id}','${escA(u.username)}')" ${u.id===_sess?.userId?'disabled':''}>&#128465;</button>
+    </div></td>
+  </tr>`).join('');
+}
+
+function showAddForm(){
+  _editId=null;
+  document.getElementById('uFormTitle').textContent='Tambah Pengguna Baru';
+  document.getElementById('ufUser').value='';document.getElementById('ufName').value='';
+  document.getElementById('ufPass').value='';document.getElementById('ufPass').placeholder='Min. 8 karakter';
+  document.getElementById('ufRole').value='viewer';
+  document.getElementById('uForm').classList.add('on');
+}
+function editUser(id){
+  const u=getUsers().find(x=>x.id===id);if(!u) return;
+  _editId=id;
+  document.getElementById('uFormTitle').textContent='Edit Pengguna';
+  document.getElementById('ufUser').value=u.username;document.getElementById('ufName').value=u.name;
+  document.getElementById('ufPass').value='';document.getElementById('ufPass').placeholder='Kosongkan jika tidak ingin ganti';
+  document.getElementById('ufRole').value=u.role;
+  document.getElementById('uForm').classList.add('on');
+}
+function batalForm(){document.getElementById('uForm').classList.remove('on');_editId=null;}
+
+async function simpanUser(){
+  const uname=document.getElementById('ufUser').value.trim();
+  const name=document.getElementById('ufName').value.trim();
+  const pass=document.getElementById('ufPass').value;
+  const role=document.getElementById('ufRole').value;
+  if(!uname||!name){toast('&#9888; Username dan nama wajib diisi.','e');return;}
+  if(!_editId&&pass.length<8){toast('&#9888; Password min. 8 karakter.','e');return;}
+  const users=getUsers();
+  if(_editId){
+    const idx=users.findIndex(x=>x.id===_editId);if(idx===-1) return;
+    users[idx].username=uname;users[idx].name=name;users[idx].role=role;
+    if(pass.length>=8) users[idx].passwordHash=await hashPwd(pass);
+    toast('&#10003; Pengguna diperbarui.','s');addAkt(`Admin perbarui akun "${uname}"`,'#b5884a');
+  }else{
+    if(users.find(x=>x.username===uname)){toast('&#9888; Username sudah dipakai.','e');return;}
+    users.push({id:uid(),username:uname,name,role,active:true,passwordHash:await hashPwd(pass),createdAt:new Date().toISOString(),lastLogin:null});
+    toast('&#10003; Pengguna ditambahkan.','s');addAkt(`Admin tambah akun "${uname}" (${role})`,'#5c8c78');
+  }
+  saveUsers(users);batalForm();renderUTable();
+}
+
+function toggleUser(id,active){
+  const users=getUsers();const u=users.find(x=>x.id===id);if(!u) return;
+  u.active=active;saveUsers(users);
+  toast(`${active?'&#10003; Diaktifkan':'&#9940; Dinonaktifkan'}: ${u.username}`,'i');
+  addAkt(`Admin ${active?'aktifkan':'nonaktifkan'} akun "${u.username}"`,active?'#34a853':'#e67e22');
+  renderUTable();
+}
+
+function askDelUser(id,uname){_delUid=id;document.getElementById('mDelTxt').textContent=`Akun "${uname}" akan dihapus permanen.`;document.getElementById('mDelUser').classList.add('on');}
+function confirmDelUser(){
+  if(!_delUid) return;closeModal('mDelUser');
+  const users=getUsers();const u=users.find(x=>x.id===_delUid);
+  saveUsers(users.filter(x=>x.id!==_delUid));
+  if(u) addAkt(`Admin hapus akun "${u.username}"`,'#c0392b');
+  toast('&#128465; Pengguna dihapus.','i');_delUid=null;renderUTable();
+}
+
+// ═══════════════════════════════════
+// CHANGE PASSWORD
+// ═══════════════════════════════════
+function openChangePwd(){
+  ['cpOld','cpNew','cpConf'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cpErr').classList.remove('on');
+  document.getElementById('mCPwd').classList.add('on');
+}
+async function doChangePwd(){
+  const old=document.getElementById('cpOld').value;
+  const nw=document.getElementById('cpNew').value;
+  const cf=document.getElementById('cpConf').value;
+  const err=document.getElementById('cpErr');
+  const setErr=m=>{err.textContent=m;err.classList.add('on');};
+  err.classList.remove('on');
+  if(!old||!nw||!cf){setErr('Semua field wajib diisi.');return;}
+  if(nw.length<8){setErr('Password baru min. 8 karakter.');return;}
+  if(nw!==cf){setErr('Password baru dan konfirmasi tidak cocok.');return;}
+  if(!/[A-Za-z]/.test(nw)||!/[0-9]/.test(nw)){setErr('Password harus mengandung huruf dan angka.');return;}
+  const users=getUsers();const idx=users.findIndex(u=>u.id===_sess.userId);
+  if(idx===-1){setErr('Akun tidak ditemukan.');return;}
+  if(await hashPwd(old)!==users[idx].passwordHash){setErr('Password lama tidak sesuai.');return;}
+  users[idx].passwordHash=await hashPwd(nw);saveUsers(users);
+  closeModal('mCPwd');toast('&#10003; Password berhasil diubah.','s');
+  addAkt(`${_sess.name} mengganti password`,'#b5884a');
+}
+
+// ═══════════════════════════════════
+// SUPABASE CONNECTION
+// ═══════════════════════════════════
+let _sb=null;               // supabase client instance
+let _conn=false;            // connected flag
+const DEFAULT_SB_URL='https://edbjwquomoelbjfzsewb.supabase.co';
+const DEFAULT_SB_KEY='sb_publishable_Jpdue3a-_GT2BLdWegvT2w_D2nIfc5t';
+let _cid=localStorage.getItem('arsipSbUrl')||DEFAULT_SB_URL;   // project url
+let _key=localStorage.getItem('arsipSbKey')||DEFAULT_SB_KEY;   // anon key
+
+function switchTab(n){
+  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.stab-body').forEach((b,i)=>b.classList.toggle('active',i===n));
+  if(n===0) runDiag();
+}
+function setD(id,st,sub){
+  const row=document.getElementById('d-'+id),b=document.getElementById('d-'+id+'-b'),s=document.getElementById('d-'+id+'-s');
+  if(!row) return;
+  row.className='drow '+st;
+  b.className='dbadge '+(st==='checking'?'spin':st);
+  b.textContent=st==='ok'?'&#10003;':st==='fail'?'&#10005;':st==='warn'?'!':st==='checking'?'&#8635;':'?';
+  if(s&&sub!==undefined) s.innerHTML=sub;
+}
+function runDiag(){
+  const proto=window.location.protocol;
+  if(proto==='file:') setD('prot','warn','Dibuka dari <code>file://</code> &#8212; sebagian browser membatasi ini, sebaiknya jalankan lewat server lokal');
+  else if(proto==='http:'||proto==='https:') setD('prot','ok',`Protokol <code>${proto}//</code> valid &#10003;`);
+  else setD('prot','warn','Protokol tidak dikenal: '+proto);
+  if(window._G.ready) setD('gis','ok','Supabase JS berhasil dimuat &#10003;');
+  else if(window._G.err) setD('gis','fail','Gagal memuat Supabase JS &#8212; periksa koneksi &amp; reload');
+  else{setD('gis','checking','Memuat...');setTimeout(runDiag,1200);return;}
+  const cid=_cid||document.getElementById('cidInp').value.trim();
+  const key=_key||document.getElementById('keyInp').value.trim();
+  const cidOk=cid.startsWith('https://')&&cid.includes('.supabase.co');
+  const keyOk=key.length>20;
+  if(cidOk&&keyOk) setD('cid','ok','Project URL &amp; anon key valid &#10003;');
+  else if(cid||key) setD('cid','fail','Format URL/key belum lengkap atau salah');
+  else setD('cid','warn','Belum diisi &#8594; tab Hubungkan');
+}
+function valCid(inp){
+  const cid=document.getElementById('cidInp').value.trim();
+  const key=document.getElementById('keyInp').value.trim();
+  const cidOk=cid.length>10&&cid.startsWith('https://')&&cid.includes('.supabase.co');
+  const keyOk=key.length>20;
+  const cInp=document.getElementById('cidInp'),kInp=document.getElementById('keyInp');
+  const st=document.getElementById('cidSt'),ht=document.getElementById('cidHt');
+  const kst=document.getElementById('keySt');
+  cInp.className=cid?(cidOk?'ok':'bad'):'';
+  st.textContent=cid?(cidOk?'&#10003;':'&#10005;'):'';
+  ht.className='fh'+(cid?cidOk?' ok':' bad':'');
+  ht.textContent=!cid?'Temukan di Supabase Dashboard &#8594; Project Settings &#8594; API':cidOk?'&#10003; Format valid':'Format salah &#8212; harus seperti https://xxxx.supabase.co';
+  kInp.className=key?(keyOk?'ok':'bad'):'';
+  kst.textContent=key?(keyOk?'&#10003;':'&#10005;'):'';
+  document.getElementById('btnGDrive').disabled=!(cidOk&&keyOk&&window._G.ready);
+  document.getElementById('ebox').classList.remove('on');
+}
+function showErr(t,m,f){
+  document.getElementById('etitle').textContent=t;document.getElementById('emsg').innerHTML=' '+m;
+  const fx=document.getElementById('efix');
+  if(f&&f.length){fx.style.display='block';fx.innerHTML='<strong>Cara memperbaiki:</strong><ol>'+f.map(x=>`<li>${x}</li>`).join('')+'</ol>';}
+  else fx.style.display='none';
+  document.getElementById('ebox').classList.add('on');switchTab(1);
+}
+function onGisOK(){
+  runDiag();
+  const ci=document.getElementById('cidInp'),ki=document.getElementById('keyInp');
+  if(_cid&&ci) ci.value=_cid;
+  if(_key&&ki) ki.value=_key;
+  if(ci) valCid(ci);
+}
+function onGisErr(){showErr('Supabase JS Gagal Dimuat','Periksa koneksi &amp; reload halaman',[]);runDiag();}
+function projectRef(url){try{return new URL(url).hostname.split('.')[0];}catch(e){return '';}}
+function setQuickLinks(url){
+  const ref=projectRef(url);
+  if(!ref) return;
+  document.getElementById('lnkBucket').href=`https://supabase.com/dashboard/project/${ref}/storage/buckets/${BUCKET}`;
+  document.getElementById('lnkTable').href=`https://supabase.com/dashboard/project/${ref}/editor`;
+  document.getElementById('lnkDash').href=`https://supabase.com/dashboard/project/${ref}`;
+  document.getElementById('dbanOpenLink').href=`https://supabase.com/dashboard/project/${ref}/storage/buckets/${BUCKET}`;
+}
+async function doSupaConnect(){
+  document.getElementById('ebox').classList.remove('on');
+  const url=document.getElementById('cidInp').value.trim();
+  const key=document.getElementById('keyInp').value.trim();
+  if(!window._G.ready){showErr('Supabase JS Belum Siap','Tunggu &amp; coba lagi',[]);return;}
+  if(!url||!url.startsWith('https://')||!url.includes('.supabase.co')){showErr('Project URL Tidak Valid','Periksa Project URL, harus seperti https://xxxx.supabase.co',[]);return;}
+  if(!key||key.length<20){showErr('Anon Key Tidak Valid','Periksa anon (public) key',[]);return;}
+  if(!canDrv()){toast('&#9940; Role '+RL[_sess?.role]+' tidak memerlukan Supabase.','e');return;}
+  const btn=document.getElementById('btnGDrive');btn.disabled=true;const oldTxt=btn.innerHTML;btn.innerHTML='Menghubungkan...';
+  try{
+    const client=window.supabase.createClient(url,key);
+    const {error}=await client.from(TABLE).select('id',{count:'exact',head:true});
+    if(error&&error.code!=='PGRST116') throw error;
+    _sb=client;_conn=true;_cid=url;_key=key;
+    localStorage.setItem('arsipSbUrl',url);localStorage.setItem('arsipSbKey',key);
+    setQuickLinks(url);
+    document.getElementById('ov').classList.add('hidden');
+    updateDriveUI(true);muatArsip();
+    addAkt(`${_sess?.name||'&#8212;'} terhubung ke Supabase`,'#5c8c78');
+    toast('&#10003; Terhubung ke Supabase','s');
+  }catch(e){
+    showErr('Koneksi Gagal',e.message||'Periksa URL, key, dan pastikan tabel/policy sudah dibuat sesuai Panduan.',['Cek tabel `arsip_files` sudah dibuat via SQL Editor','Cek policy RLS mengizinkan akses anon','Cek Project URL &amp; anon key sudah benar']);
+    toast('&#10005; Koneksi Supabase gagal','e');
+  }
+  btn.disabled=false;btn.innerHTML=oldTxt;
+}
+function doSupaDisconnect(){
+  _sb=null;_conn=false;
+  _files=[];updateDriveUI(false);renderList();
+  addAkt(`${_sess?.name||'&#8212;'} memutus koneksi Supabase`,'#c0392b');toast('&#128075; Terputus dari Supabase','i');
+}
+function updateDriveUI(on){
+  document.getElementById('dbanner').style.display=on?'flex':'none';
+  document.getElementById('drvConBdg').style.display=on?'inline-flex':'none';
+  document.getElementById('drvInd').textContent=on?'&#9679; Live (Supabase)':'';
+  const upOk=on&&canUp();
+  document.getElementById('upZone').classList.toggle('off',!upOk);
+  document.getElementById('lwarn').style.display=on?'none':'block';
+  document.getElementById('upHint').textContent=on?'Klik untuk pilih file':'Hubungkan Supabase untuk mengunggah';
+  document.getElementById('btnSave').innerHTML=on&&canUp()?'&#9729; Unggah ke Supabase':canUp()?'&#128274; Hubungkan Supabase dulu':'&#9940; Role ini tidak dapat mengunggah';
+  updateQuota();
+}
+function updateQuota(){
+  const used=_files.reduce((s,f)=>s+f.bytes,0);
+  const pct=Math.min(Math.round((used/QUOTA_BYTES)*100),100);
+  document.getElementById('stgFill').style.width=(_conn?pct:0)+'%';
+  document.getElementById('stgUsed').textContent=_conn?fBytes(used)+' terpakai':'&#8212; terpakai';
+  document.getElementById('stgTot').textContent=_conn?fBytes(QUOTA_BYTES)+' ('+pct+'%)':'&#8212; total';
+}
+function modeOffline(){document.getElementById('ov').classList.add('hidden');document.getElementById('lwarn').style.display='block';updateDriveUI(false);renderList();}
+
+// ═══════════════════════════════════
+// SUPABASE FILE OPERATIONS
+// ═══════════════════════════════════
+let _files=[],_jenis='semua',_page=1;
+const PER=10;
+let _delId=null,_newCt=0;
+
+async function muatArsip(){
+  if(!_sb) return;
+  document.getElementById('listArsip').innerHTML='<div class="loading"><div class="spin2"></div><p>Memuat file...</p></div>';
+  document.getElementById('drvInd').textContent='&#8635; Memuat...';
+  try{
+    const {data,error}=await _sb.from(TABLE).select('*').order('created_at',{ascending:false});
+    if(error) throw error;
+    _files=(data||[]).map(f=>{
+      const pub=_sb.storage.from(BUCKET).getPublicUrl(f.storage_path);
+      const link=pub?.data?.publicUrl||'#';
+      return{
+        id:f.id,nama:f.nama,jenis:getJenis(f.mime_type||'',f.nama),mimeType:f.mime_type||'',
+        ukuran:fBytes(parseInt(f.size||0)),bytes:parseInt(f.size||0),
+        tgl:(f.created_at||'').split('T')[0],dibuat:(f.created_at||'').split('T')[0],
+        link,dl:link,path:f.storage_path,pengunggah:f.pengunggah||'',kategori:f.kategori||'',
+      };
+    });
+    document.getElementById('drvInd').textContent='&#9679; Live (Supabase)';
+    addAkt(`${_sess?.name||'&#8212;'} memuat ${_files.length} file`,'#5c8c78');
+    toast(`&#10003; ${_files.length} file dimuat`,'s');
+  }catch(e){
+    document.getElementById('drvInd').textContent='&#9888; Gagal';
+    toast('&#10005; Gagal muat: '+(e.message||'periksa tabel & policy'),'e');
+    _files=[];
+  }
+  renderList();
+}
+
+function renderList(){
+  const kata=document.getElementById('inpCari').value.toLowerCase();
+  const srt=document.getElementById('srtBy').value;
+  let hasil=_files.filter(f=>(_jenis==='semua'||f.jenis===_jenis)&&f.nama.toLowerCase().includes(kata));
+  if(srt==='nama') hasil.sort((a,b)=>a.nama.localeCompare(b.nama));
+  else if(srt==='terlama') hasil.sort((a,b)=>a.tgl.localeCompare(b.tgl));
+  else if(srt==='ukuran') hasil.sort((a,b)=>b.bytes-a.bytes);
+  else hasil.sort((a,b)=>b.tgl.localeCompare(a.tgl));
+  const total=hasil.length,pages=Math.max(1,Math.ceil(total/PER));
+  if(_page>pages) _page=pages;
+  const slice=hasil.slice((_page-1)*PER,_page*PER);
+  const cont=document.getElementById('listArsip');
+  if(!_conn&&_files.length===0){
+    cont.innerHTML=`<div class="empty"><span class="ei">&#128274;</span><p>Belum terhubung ke Supabase</p><small>${canDrv()?'':'Role Viewer tidak memerlukan Supabase'}</small><br><br>${canDrv()?'<button class="btn btn-acc" style="margin:0 auto" onclick="document.getElementById(\'ov\').classList.remove(\'hidden\')">&#128279; Hubungkan Supabase</button>':''}</div>`;
+  }else if(!slice.length){
+    cont.innerHTML=`<div class="empty"><span class="ei">&#128269;</span><p>${_files.length===0?'Belum ada file':'Tidak ditemukan'}</p><small>${_files.length===0?'Upload file pertama!':'Coba kata kunci lain'}</small></div>`;
+  }else{
+    cont.innerHTML=slice.map(f=>`
+    <div class="frow" onclick="openDetail('${f.id}')">
+      <div class="fico ${ikCls(f.jenis)}">${f.jenis}</div>
+      <div style="min-width:0"><div class="fnm" title="${escH(f.nama)}">${escH(f.nama)}</div><div class="fmt2">Supabase Storage</div></div>
+      <div class="fdt">${fTgl(f.tgl)}</div>
+      <div class="fsz">${f.ukuran}</div>
+      <div><span class="badge bdrv2">Supabase</span></div>
+      <div class="aksi" onclick="event.stopPropagation()">
+        <a href="${f.dl}" target="_blank" class="bsm bund" onclick="logDl('${escA(f.nama)}')">&#8595;</a>
+        <a href="${f.link}" target="_blank" class="bsm bbuk">&#8599;</a>
+        ${canDel()?`<button class="bsm bhap" onclick="askHapus('${f.id}','${escA(f.nama)}')">&#128465;</button>`:''}
+      </div>
+    </div>`).join('');
+  }
+  document.getElementById('tot').textContent=_files.length;
+  document.getElementById('totNew').textContent=_newCt;
+  const tb=_files.reduce((s,f)=>s+f.bytes,0);
+  document.getElementById('totSz').textContent=tb>0?fBytes(tb):'&#8212;';
+  const katSet=new Set(_files.map(f=>f.kategori).filter(Boolean));
+  const totKatEl=document.getElementById('totKat');if(totKatEl) totKatEl.textContent=katSet.size;
+  document.getElementById('pgInfo').textContent=total>0?`${(_page-1)*PER+1}&#8211;${Math.min(_page*PER,total)} dari ${total}`:'';
+  const pb=document.getElementById('pgBtns');pb.innerHTML='';
+  for(let i=1;i<=pages;i++){const b=document.createElement('button');b.className='pbtn'+(i===_page?' active':'');b.textContent=i;b.onclick=()=>{_page=i;renderList();};pb.appendChild(b);}
+  updChart();drawSparks();updateQuota();
+}
+
+function setJenis(el,j){document.querySelectorAll('.pills .pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');_jenis=j;_page=1;renderList();}
+function doFilter(){_page=1;renderList();}
+
+function onFileSelect(){const f=document.getElementById('inpFile').files[0];if(!f) return;document.getElementById('fSelNm').textContent=f.name+' ('+fBytes(f.size)+')';document.getElementById('fSelInfo').classList.add('on');}
+
+async function doUpload(){
+  if(!_sb){document.getElementById('ov').classList.remove('hidden');return;}
+  if(!canUp()){toast('&#9940; Role '+RL[_sess?.role]+' tidak dapat mengunggah.','e');return;}
+  const file=document.getElementById('inpFile').files[0];
+  const upl=document.getElementById('inpUp').value.trim();
+  const kat=document.getElementById('inpKat').value.trim();
+  if(!file){toast('&#9888; Pilih file dulu!','e');return;}
+  if(!upl){toast('&#9888; Isi nama pengunggah!','e');return;}
+  const catatan=document.getElementById('inpCat').value.trim();
+  const prog=document.getElementById('upProg'),fill=document.getElementById('pFill'),pct=document.getElementById('pPct'),lbl=document.getElementById('pLbl');
+  const sP=(n,m)=>{fill.style.width=n+'%';pct.textContent=n+'%';if(m) lbl.textContent=m;};
+  prog.classList.add('on');sP(5,'Menyiapkan...');
+  try{
+    const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    const path=`${Date.now()}_${safeName}`;
+    sP(40,'Mengunggah ke Supabase Storage...');
+    const {error:upErr}=await _sb.storage.from(BUCKET).upload(path,file,{contentType:file.type||'application/octet-stream'});
+    if(upErr) throw upErr;
+    sP(75,'Menyimpan metadata...');
+    const row={nama:file.name,storage_path:path,mime_type:file.type||'',size:file.size,pengunggah:upl,kategori:kat,catatan,role:_sess?.role||''};
+    const {data:ins,error:insErr}=await _sb.from(TABLE).insert(row).select().single();
+    if(insErr) throw insErr;
+    sP(100,'Selesai! &#10003;');
+    const pub=_sb.storage.from(BUCKET).getPublicUrl(path);
+    const link=pub?.data?.publicUrl||'#';
+    _files.unshift({id:ins.id,nama:ins.nama,jenis:getJenis(ins.mime_type,ins.nama),mimeType:ins.mime_type,ukuran:fBytes(parseInt(ins.size||0)),bytes:parseInt(ins.size||0),tgl:(ins.created_at||new Date().toISOString()).split('T')[0],dibuat:(ins.created_at||new Date().toISOString()).split('T')[0],link,dl:link,path,pengunggah:ins.pengunggah,kategori:ins.kategori});
+    _newCt++;
+    setTimeout(()=>{
+      prog.classList.remove('on');fill.style.width='0%';
+      ['inpFile','inpUp','inpKat','inpCat'].forEach(id=>{document.getElementById(id).value='';});
+      document.getElementById('fSelInfo').classList.remove('on');
+      renderList();toast('&#10003; File berhasil diunggah!','s');
+      addAkt(`${_sess?.name||upl} unggah "${file.name}"`,'#5c8c78');
+    },600);
+  }catch(e){prog.classList.remove('on');toast('&#10005; Gagal: '+(e.message||'periksa bucket & policy'),'e');}
+}
+
+function askHapus(id,nama){
+  if(!canDel()){toast('&#9940; Role ini tidak dapat menghapus.','e');return;}
+  _delId=id;document.getElementById('mHapusTxt').textContent=`"${nama}" akan dihapus permanen.`;
+  closeModal('mDetail');document.getElementById('mHapus').classList.add('on');
+}
+async function confirmHapus(){
+  if(!_delId) return;closeModal('mHapus');
+  const f=_files.find(x=>x.id===_delId);
+  if(_sb&&f){
+    try{
+      const {error:sErr}=await _sb.storage.from(BUCKET).remove([f.path]);
+      if(sErr) throw sErr;
+      const {error:dErr}=await _sb.from(TABLE).delete().eq('id',_delId);
+      if(dErr) throw dErr;
+    }catch(e){toast('&#10005; Gagal hapus: '+(e.message||'periksa policy'),'e');_delId=null;return;}
+  }
+  if(f) addAkt(`${_sess?.name||'&#8212;'} hapus "${f.nama}"`,'#c0392b');
+  _files=_files.filter(x=>x.id!==_delId);_delId=null;renderList();toast('&#128465; File dihapus','i');
+}
+function closeModal(id){document.getElementById(id).classList.remove('on');if(id==='mHapus') _delId=null;}
+
+function openDetail(id){
+  const f=_files.find(x=>x.id===id);if(!f) return;
+  const ik={PDF:'&#128196;',DOC:'&#128221;',XLS:'&#128202;',IMG:'&#128247;',ZIP:'&#128476;',GEN:'&#128206;'};
+  document.getElementById('dtIco').innerHTML=ik[f.jenis]||'&#128206;';
+  document.getElementById('dtNm').textContent=f.nama;
+  document.getElementById('dtBuka').href=f.link;document.getElementById('dtUnduh').href=f.dl;
+  document.getElementById('dtHapus').style.display=canDel()?'':'none';
+  document.getElementById('dtHapus').onclick=()=>askHapus(f.id,f.nama);
+  document.getElementById('dtRows').innerHTML=[['Jenis',f.jenis],['Ukuran',f.ukuran],['Diubah',fTgl(f.tgl)],['Dibuat',fTgl(f.dibuat)],['Pengunggah',f.pengunggah||'&#8212;'],['Kategori',f.kategori||'&#8212;'],['Backend','Supabase Storage']].map(([k,v])=>`<div class="dr"><span class="dk2">${k}</span><span class="dv2">${v}</span></div>`).join('');
+  document.getElementById('mDetail').classList.add('on');
+}
+
+function eksporCSV(){
+  if(!canExp()){toast('&#9940; Role ini tidak dapat mengekspor.','e');return;}
+  if(!_files.length){toast('&#9888; Tidak ada data','e');return;}
+  const hdr=['No','Nama File','Jenis','Ukuran','Tanggal','Pengunggah','Kategori','Link'];
+  const rows=_files.map((f,i)=>[i+1,`"${f.nama}"`,f.jenis,f.ukuran,fTgl(f.tgl),`"${f.pengunggah||''}"`,`"${f.kategori||''}"`,f.link]);
+  const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download='arsip-polkeslu.csv';a.click();toast('&#8595; CSV diunduh!','s');
+}
+
+// ═══════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════
+let _cJ=null,_cM=null;
+function updChart(){
+  const dk=document.documentElement.getAttribute('data-theme')==='dark';
+  const tc=dk?'rgba(255,255,255,.5)':'rgba(0,0,0,.4)';
+  const gc=dk?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)';
+  const jM={};_files.forEach(f=>{jM[f.jenis]=(jM[f.jenis]||0)+1;});
+  const jL=Object.keys(jM).length?Object.keys(jM):['Kosong'];
+  const jD=Object.keys(jM).length?Object.values(jM):[1];
+  const jC=['#b5884a','#5c8c78','#7b8fc0','#c07b7b','#e8a838','#a06bbd','#4a9fb5'];
+  const cfJ={type:'doughnut',data:{labels:jL,datasets:[{data:jD,backgroundColor:jC,borderWidth:2,borderColor:dk?'#1e1e22':'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'right',labels:{boxWidth:10,font:{size:11},color:tc}}}}};
+  if(_cJ){_cJ.data=cfJ.data;_cJ.options.plugins.legend.labels.color=tc;_cJ.update();}
+  else _cJ=new Chart(document.getElementById('cJenis'),cfJ);
+  const cfM={type:'bar',data:{labels:['Sen','Sel','Rab','Kam','Jum','Sab','Min'],datasets:[{label:'File',data:[0,0,0,0,0,0,_files.length],backgroundColor:'rgba(181,136,74,.2)',borderColor:'rgba(181,136,74,.8)',borderWidth:2,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gc},ticks:{color:tc,font:{size:11}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:11},stepSize:1},beginAtZero:true}}}};
+  if(_cM){_cM.data=cfM.data;['x','y'].forEach(ax=>{_cM.options.scales[ax].grid.color=gc;_cM.options.scales[ax].ticks.color=tc;});_cM.update();}
+  else _cM=new Chart(document.getElementById('cMgg'),cfM);
+}
+function drawSparks(){
+  const cols=['#b5884a','#5c8c78','#c07b7b','#7b8fc0'];
+  const n=_files.length;
+  [[0,0,0,0,0,0,n],[3,3,3,3,3,3,3],[0,0,0,0,0,0,_newCt],[0,0,0,0,0,0,Math.max(1,Math.round(n*.1))]].forEach((d,i)=>{
+    const el=document.getElementById(`sp${i+1}`);if(!el) return;
+    const mx=Math.max(...d)||1;
+    el.innerHTML=d.map((v,j)=>`<div class="spk" style="height:${Math.max(3,Math.round((v/mx)*24))}px;background:${cols[i]};opacity:${j===d.length-1?'.85':'.15'}"></div>`).join('');
+  });
+}
+
+// ═══════════════════════════════════
+// ACTIVITY
+// ═══════════════════════════════════
+let _aktCt=0;
+function addAkt(txt,col){
+  const box=document.getElementById('aktBox');
+  if(box.querySelector('.empty')) box.innerHTML='';
+  const el=document.createElement('div');el.className='ait';
+  el.innerHTML=`<div class="adot2" style="background:${col}"></div><div><div class="atxt">${txt}</div><div class="atm">${new Date().toLocaleTimeString('id-ID')}</div></div>`;
+  box.prepend(el);_aktCt++;
+  if(_aktCt>15){const items=box.querySelectorAll('.ait');items[items.length-1].remove();}
+  document.getElementById('jmlAkt').textContent=Math.min(_aktCt,15)+' kegiatan';
+}
+function logDl(nm){addAkt(`${_sess?.name||'&#8212;'} unduh "${nm}"`,'#b5884a');}
+function bukaSecPanel(){document.getElementById('secPanel').style.display='block';document.getElementById('secPanel').scrollIntoView({behavior:'smooth'});}
+
+// ═══════════════════════════════════
+// TOAST
+// ═══════════════════════════════════
+let _tT=null;
+function toast(msg,t='i'){clearTimeout(_tT);const el=document.getElementById('toastEl');el.innerHTML=msg;el.className='toast '+t;requestAnimationFrame(()=>el.classList.add('on'));_tT=setTimeout(()=>el.classList.remove('on'),3500);}
+
+// ═══════════════════════════════════
+// UTILS
+// ═══════════════════════════════════
+function getJenis(mime,nama){
+  const e=(nama||'').split('.').pop().toUpperCase();
+  if(['PDF'].includes(e)) return 'PDF';
+  if(['DOC','DOCX'].includes(e)||mime.includes('document')) return 'DOC';
+  if(['XLS','XLSX'].includes(e)||mime.includes('spreadsheet')) return 'XLS';
+  if(['JPG','JPEG','PNG','GIF','WEBP','SVG'].includes(e)||mime.startsWith('image/')) return 'IMG';
+  if(['ZIP','RAR','7Z','TAR','GZ'].includes(e)||mime.includes('zip')) return 'ZIP';
+  return 'GEN';
+}
+function ikCls(j){return{PDF:'f-pdf',DOC:'f-doc',XLS:'f-xls',IMG:'f-img',ZIP:'f-zip',GEN:'f-gen'}[j]||'f-gen';}
+function fBytes(b){if(!b||b===0)return'&#8212;';if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';if(b<1073741824)return(b/1048576).toFixed(1)+' MB';return(b/1073741824).toFixed(2)+' GB';}
+function fTgl(iso){if(!iso)return'&#8212;';const bl=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];const d=new Date(iso+'T00:00:00');return isNaN(d)?iso:d.getDate()+' '+bl[d.getMonth()]+' '+d.getFullYear();}
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escA(s){return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+
+// ═══════════════════════════════════
+// DARK MODE
+// ═══════════════════════════════════
+function toggleDark(){
+  const h=document.documentElement;const dk=h.getAttribute('data-theme')==='dark';
+  h.setAttribute('data-theme',dk?'light':'dark');
+  document.getElementById('dBtn').innerHTML=dk?'&#127769;':'&#9728;';
+  localStorage.setItem('arsipTheme',dk?'light':'dark');setTimeout(updChart,50);
+}
+if(localStorage.getItem('arsipTheme')==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('dBtn').innerHTML='&#9728;';}
+
+// ═══════════════════════════════════
+// MISC
+// ═══════════════════════════════════
+const HN=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const BN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const N=new Date();
+document.getElementById('tglHari').textContent=HN[N.getDay()]+', '+N.getDate()+' '+BN[N.getMonth()]+' '+N.getFullYear();
+window.addEventListener('scroll',()=>document.getElementById('stBtn').classList.toggle('on',scrollY>300));
+function scrollUp(){document.getElementById('upSec').scrollIntoView({behavior:'smooth'});}
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+async function autoConnect(){
+  if(!_cid||!_key||!window._G.ready) return;
+  try{
+    const client=window.supabase.createClient(_cid,_key);
+    const {error}=await client.from(TABLE).select('id',{count:'exact',head:true});
+    if(error&&error.code!=='PGRST116') throw error;
+    _sb=client;_conn=true;setQuickLinks(_cid);
+    updateDriveUI(true);muatArsip();
+  }catch(e){/* silent — user can reconnect via tab Hubungkan */}
+}
+(async()=>{
+  await initUsers();
+  const s=getSess();
+  if(s){_sess=s;document.getElementById('lo').classList.add('hidden');onSessStart();if(canDrv()) autoConnect();}
+  else{document.getElementById('lo').classList.remove('hidden');updABar();if(isLocked()) startLock();}
+  const ci=document.getElementById('cidInp'),ki=document.getElementById('keyInp');
+  if(_cid&&ci) ci.value=_cid;
+  if(_key&&ki) ki.value=_key;
+  runDiag();updChart();drawSparks();
+})();
+</script>
+</body>
+</html>
