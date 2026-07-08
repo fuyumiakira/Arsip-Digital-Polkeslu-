@@ -251,9 +251,11 @@ nav{background:linear-gradient(180deg,var(--nav),#0e0e11 130%);padding:0 40px;di
 .pill:hover{border-color:var(--accent);color:var(--accent)}
 .pill.active{background:rgba(181,136,74,.1);border-color:var(--accent);color:var(--accent)}
 .pdot{width:6px;height:6px;border-radius:50%}
-.thead{display:grid;grid-template-columns:36px 1fr 90px 70px 80px 105px;gap:10px;padding:7px 18px;background:var(--bg);border-bottom:1px solid var(--bdr)}
+.thead{display:grid;grid-template-columns:22px 36px 1fr 90px 70px 80px 130px;gap:10px;padding:7px 18px;background:var(--bg);border-bottom:1px solid var(--bdr)}
 .th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.frow{display:grid;grid-template-columns:36px 1fr 90px 70px 80px 105px;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--bdr);transition:background .15s;cursor:pointer}
+.frow{display:grid;grid-template-columns:22px 36px 1fr 90px 70px 80px 130px;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--bdr);transition:background .15s;cursor:pointer}
+.frow.sel{background:rgba(26,115,232,.06)}
+.fchk{width:16px;height:16px;cursor:pointer;accent-color:var(--accent)}
 .frow:last-child{border-bottom:none}
 .frow:hover{background:rgba(181,136,74,.04)}
 .fico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;overflow:hidden}
@@ -268,6 +270,20 @@ nav{background:linear-gradient(180deg,var(--nav),#0e0e11 130%);padding:0 40px;di
 .badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600}
 .bdrv2{background:rgba(26,115,232,.1);color:#1a73e8}
 .aksi{display:flex;gap:4px}
+.tagwrap{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.tagchip{display:inline-flex;align-items:center;padding:1px 7px;border-radius:10px;font-size:9.5px;font-weight:600;background:rgba(92,140,120,.12);color:var(--a2);white-space:nowrap}
+[data-theme=dark] .tagchip{background:rgba(111,207,151,.14);color:#6fcf97}
+.tagchip.more{background:var(--bg);color:var(--muted)}
+.tagf-row{display:flex;gap:7px;flex-wrap:wrap;padding:0 18px 8px}
+.tagf{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:500;background:var(--card);border:1px solid var(--bdr);color:var(--muted);cursor:pointer;transition:all .2s}
+.tagf:hover{border-color:var(--a2);color:var(--a2)}
+.tagf.active{background:rgba(92,140,120,.12);border-color:var(--a2);color:var(--a2)}
+.tageditor{display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.tageditor input{flex:1;min-width:120px;padding:6px 9px;border:1px solid var(--bdr);border-radius:7px;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;background:var(--inp);color:var(--text);outline:none}
+.bulkbar{display:none;align-items:center;justify-content:space-between;gap:10px;background:rgba(26,115,232,.08);border:1px solid rgba(26,115,232,.25);border-radius:10px;padding:9px 18px;margin:0 18px 10px;font-size:12px;color:var(--text)}
+.bulkbar.on{display:flex}
+.bulkbar b{color:#1a73e8}
+.bulkact{display:flex;gap:7px}
 .empty{padding:54px 20px;text-align:center;color:var(--muted)}
 .ei{font-size:44px;margin-bottom:11px;display:block}
 .empty p{font-size:14px;margin-bottom:4px;font-weight:500;color:var(--text)}
@@ -388,7 +404,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
 @media(max-width:960px){
   .stats{grid-template-columns:repeat(2,1fr)}
   .chart-row,.grid2{grid-template-columns:1fr}
-  .frow,.thead{grid-template-columns:36px 1fr 80px 100px}
+  .frow,.thead{grid-template-columns:20px 36px 1fr 80px 100px}
   .fdt,.fsz,.th:nth-child(3),.th:nth-child(4){display:none}
   nav{padding:0 14px}.nav-links{display:none}
   .container{padding:16px 12px}
@@ -449,12 +465,12 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
   <div class="scard">
     <div class="sh">
       <div style="font-size:28px">&#128194;</div>
-      <div class="shlogo">Arsip<em>Digital Polkeslu</em><small>Konfigurasi Supabase</small></div>
+      <div class="shlogo">Arsip<em>Digital Polkeslu</em><small>Konfigurasi ArsipCloud</small></div>
     </div>
     <div class="scope-notice">
       <div class="sn-icon">&#128274;</div>
       <div>
-        <div class="sn-title">Backend gratis: Supabase Storage + Database (tanpa OAuth)</div>
+        <div class="sn-title">Backend gratis: ArsipCloud Storage + Database (tanpa OAuth)</div>
         <div class="sn-pills">
           <span class="sn-pill sn-ok">&#10003; Upload file</span>
           <span class="sn-pill sn-ok">&#10003; Baca &amp; unduh file</span>
@@ -469,10 +485,10 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
       <button class="stab" onclick="switchTab(2)">&#128214; Panduan</button>
     </div>
     <div class="stab-body active" id="tab0">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Periksa semua prasyarat sebelum menghubungkan ke Supabase.</p>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Periksa semua prasyarat sebelum menghubungkan ke ArsipCloud.</p>
       <div id="diagGrid">
         <div class="drow" id="d-prot"><div class="di">&#127760;</div><div class="dd"><div class="dt">Protokol HTTP/HTTPS</div><div class="ds" id="d-prot-s">Memeriksa...</div></div><div class="dbadge spin" id="d-prot-b">&#8635;</div></div>
-        <div class="drow" id="d-gis"><div class="di">&#128230;</div><div class="dd"><div class="dt">Supabase JS Library</div><div class="ds" id="d-gis-s">Memuat library...</div></div><div class="dbadge spin" id="d-gis-b">&#8635;</div></div>
+        <div class="drow" id="d-gis"><div class="di">&#128230;</div><div class="dd"><div class="dt">Mesin Sinkronisasi ArsipCloud</div><div class="ds" id="d-gis-s">Memuat mesin sinkronisasi...</div></div><div class="dbadge spin" id="d-gis-b">&#8635;</div></div>
         <div class="drow" id="d-cid"><div class="di">&#128221;</div><div class="dd"><div class="dt">Project URL &amp; Anon Key</div><div class="ds" id="d-cid-s">Memeriksa...</div></div><div class="dbadge q" id="d-cid-b">?</div></div>
         <div class="drow ok" id="d-scope"><div class="di">&#128274;</div><div class="dd"><div class="dt">Anon key (public, aman dipakai di browser)</div><div class="ds">Akses diatur lewat Row Level Security &#10003;</div></div><div class="dbadge ok">&#10003;</div></div>
       </div>
@@ -486,15 +502,15 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
         <div style="margin-top:5px;font-size:10.5px">Project URL &amp; anon key disimpan di localStorage browser ini saja &#8212; anon key memang didesain aman untuk dipakai di sisi client selama RLS diaktifkan.</div>
       </div>
       <div class="fw">
-        <label>Supabase Project URL</label>
+        <label>ArsipCloud Project URL</label>
         <div class="fiw">
           <input type="text" id="cidInp" placeholder="https://xxxxxxxxxxxx.supabase.co" oninput="valCid(this)" autocomplete="off" spellcheck="false">
           <span class="fist" id="cidSt"></span>
         </div>
-        <div class="fh" id="cidHt">Temukan di Supabase Dashboard &#8594; Project Settings &#8594; API</div>
+        <div class="fh" id="cidHt">Temukan di ArsipCloud Dashboard &#8594; Project Settings &#8594; API</div>
       </div>
       <div class="fw">
-        <label>Supabase anon (public) key</label>
+        <label>ArsipCloud API Key (Public)</label>
         <div class="fiw">
           <input type="text" id="keyInp" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." oninput="valCid(document.getElementById('cidInp'))" autocomplete="off" spellcheck="false">
           <span class="fist" id="keySt"></span>
@@ -504,12 +520,12 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
       <div class="ebox" id="ebox"><strong id="etitle">Error</strong><span id="emsg"></span><div class="efix" id="efix" style="display:none"></div></div>
       <button class="btn-g" id="btnGDrive" onclick="doSupaConnect()" disabled>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M11.9 1.1 3.3 13.9c-.4.6 0 1.4.7 1.4h7.1l-.9 7.6c-.1.9 1 1.4 1.5.6l8.6-12.8c.4-.6 0-1.4-.7-1.4h-7.1l.9-7.6c.1-.9-1-1.4-1.5-.6z" fill="#3ECF8E"/></svg>
-        Hubungkan ke Supabase
+        Hubungkan ke ArsipCloud
       </button>
       <button class="skip" onclick="modeOffline()">Lewati &#8212; mode offline</button>
     </div>
     <div class="stab-body" id="tab2" style="max-height:400px;overflow-y:auto">
-      <div class="gs"><div class="gsn">1</div><div><div class="gst">Buat akun &amp; project gratis</div><div class="gsd">Buka <a href="https://supabase.com" target="_blank">supabase.com</a> &#8594; Sign up &#8594; New Project (pilih region terdekat &amp; simpan database password)</div></div></div>
+      <div class="gs"><div class="gsn">1</div><div><div class="gst">Buat akun &amp; project ArsipCloud gratis</div><div class="gsd">Buka <a href="https://supabase.com" target="_blank">supabase.com</a> (penyedia layanan ArsipCloud) &#8594; Sign up &#8594; New Project (pilih region terdekat &amp; simpan database password)</div></div></div>
       <div class="gs"><div class="gsn">2</div><div><div class="gst">Buat Storage bucket</div><div class="gsd">Menu <strong>Storage</strong> &#8594; New bucket &#8594; beri nama <code>arsip</code> &#8594; aktifkan <strong>Public bucket</strong> agar file bisa diunduh lewat link</div></div></div>
       <div class="gs"><div class="gsn">3</div><div><div class="gst">Buat tabel metadata</div><div class="gsd">Menu <strong>SQL Editor</strong> &#8594; New query &#8594; jalankan skrip <code>arsip_files</code> pada tab Panduan SQL di bawah, lalu <strong>Run</strong></div><div class="gtag warn">&#9888; Wajib sebelum upload pertama</div></div></div>
       <div class="gs"><div class="gsn">4</div><div><div class="gst">Aktifkan akses publik (RLS Policy)</div><div class="gsd">Tabel &amp; bucket baru default-nya terkunci. Skrip SQL di langkah 3 sudah menyertakan policy select/insert/delete dasar &#8212; sesuaikan jika perlu lebih ketat</div></div></div>
@@ -525,6 +541,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
     <a class="active">Dashboard</a>
     <a>Semua Arsip</a>
     <a class="adm" id="navUsers" style="display:none" onclick="bukaUserMgmt()">&#128101; Pengguna</a>
+    <a onclick="bukaAuditLog()">&#128220; Log Audit</a>
     <a onclick="bukaSecPanel()">&#128274; Keamanan</a>
   </div>
   <div class="nav-right">
@@ -551,7 +568,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
 
   <div class="dbanner" id="dbanner" style="display:none">
     <div class="dbi"><div class="ddot"></div>
-      <div><span id="drvUserInfo">Terhubung ke Supabase</span>
+      <div><span id="drvUserInfo">Terhubung ke ArsipCloud</span>
         <small>Bucket: arsip &nbsp;&#183;&nbsp; <span class="stag">&#128274; Storage + DB</span> &nbsp;&#183;&nbsp; <span id="lastSync">Sinkron otomatis aktif</span></small>
       </div>
     </div>
@@ -562,7 +579,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="st-top"><span class="st-em">&#128193;</span><div class="st-sp" id="sp1"></div></div><div class="st-lbl">Total Arsip</div><div class="st-num" id="tot">0</div><div class="st-note">Via Supabase Storage</div></div>
+    <div class="stat"><div class="st-top"><span class="st-em">&#128193;</span><div class="st-sp" id="sp1"></div></div><div class="st-lbl">Total Arsip</div><div class="st-num" id="tot">0</div><div class="st-note">Via ArsipCloud Storage</div></div>
     <div class="stat"><div class="st-top"><span class="st-em">&#128193;</span><div class="st-sp" id="sp2"></div></div><div class="st-lbl">Kategori Arsip</div><div class="st-num" id="totKat">0</div><div class="st-note">Kategori berbeda</div></div>
     <div class="stat"><div class="st-top"><span class="st-em">&#128228;</span><div class="st-sp" id="sp3"></div></div><div class="st-lbl">Diunggah Hari Ini</div><div class="st-num" id="totNew">0</div><div class="st-note">Sesi ini</div></div>
     <div class="stat"><div class="st-top"><span class="st-em">&#128190;</span><div class="st-sp" id="sp4"></div></div><div class="st-lbl">Total Ukuran</div><div class="st-num" id="totSz" style="font-size:20px;padding-top:4px">&#8212;</div><div class="st-note">File app ini</div></div>
@@ -596,7 +613,15 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
           <span class="pill" onclick="setJenis(this,'IMG')"><span class="pdot" style="background:#b7950b"></span>Gambar</span>
           <span class="pill" onclick="setJenis(this,'ZIP')"><span class="pdot" style="background:#7d3c98"></span>Zip</span>
         </div>
-        <div class="thead"><div class="th"></div><div class="th">Nama File</div><div class="th">Tanggal</div><div class="th">Ukuran</div><div class="th">Tipe</div><div class="th">Aksi</div></div>
+        <div class="tagf-row" id="tagfRow"></div>
+        <div class="bulkbar" id="bulkBar">
+          <span><b id="bulkCt">0</b> file dipilih</span>
+          <div class="bulkact">
+            <button class="bsm bund" onclick="bulkDownloadZip()">&#8595; Unduh ZIP</button>
+            <button class="bsm bcan" style="background:var(--bg);color:var(--text)" onclick="clearSelection()">Batal</button>
+          </div>
+        </div>
+        <div class="thead"><div class="th"><input type="checkbox" class="fchk" id="chkAll" onchange="toggleSelectAll(this.checked)" title="Pilih semua"></div><div class="th"></div><div class="th">Nama File</div><div class="th">Tanggal</div><div class="th">Ukuran</div><div class="th">Tipe</div><div class="th">Aksi</div></div>
         <div id="listArsip"></div>
         <div class="pages"><span id="pgInfo"></span><div class="pbtns" id="pgBtns"></div></div>
       </div>
@@ -604,12 +629,12 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
 
     <div class="rcol">
       <div class="upsec" id="upSec">
-        <h3>&#128193; Upload Arsip ke Supabase</h3>
+        <h3>&#128193; Upload Arsip ke ArsipCloud</h3>
         <div class="upzone off" id="upZone">
-          <input type="file" id="inpFile" onchange="onFileSelect()" accept="*/*">
+          <input type="file" id="inpFile" onchange="onFileSelect()" accept="*/*" multiple>
           <span class="upico">&#9729;</span>
           <h4>Pilih atau Seret File</h4>
-          <p id="upHint">Hubungkan Supabase untuk mengunggah</p>
+          <p id="upHint">Hubungkan ArsipCloud untuk mengunggah</p>
           <div class="fmts"><span class="fmtl">PDF</span><span class="fmtl">DOCX</span><span class="fmtl">XLSX</span><span class="fmtl">JPG</span><span class="fmtl">ZIP</span></div>
         </div>
         <div class="fsel" id="fSelInfo">&#10003; <span id="fSelNm"></span></div>
@@ -619,17 +644,19 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
         </div>
         <div class="fg"><label>Nama Pengunggah</label><input type="text" id="inpUp" placeholder="Contoh: Budi Santoso"></div>
         <div class="fg"><label>Kategori</label><input type="text" id="inpKat" placeholder="Misal: Laporan Keuangan Q1"></div>
+        <div class="fg"><label>Tag <span style="font-weight:400;color:var(--muted)">(opsional, pisahkan koma)</span></label><input type="text" id="inpTags" placeholder="Misal: penting, semester-1, keuangan"></div>
         <div class="fg"><label>Catatan (opsional)</label><textarea id="inpCat" placeholder="Keterangan tambahan..."></textarea></div>
-        <button class="btn btn-dark" style="width:100%;justify-content:center" id="btnSave" onclick="doUpload()">&#128274; Hubungkan Supabase dulu</button>
-        <div class="lwarn" id="lwarn">&#9888; <a onclick="document.getElementById('ov').classList.remove('hidden')">Hubungkan Supabase</a> untuk mengunggah</div>
+        <div style="font-size:11px;color:var(--muted);margin:-5px 0 10px">&#8505; Bisa pilih beberapa file sekaligus &#8212; setiap file akan diberi metadata yang sama.</div>
+        <button class="btn btn-dark" style="width:100%;justify-content:center" id="btnSave" onclick="doUpload()">&#128274; Hubungkan ArsipCloud dulu</button>
+        <div class="lwarn" id="lwarn">&#9888; <a onclick="document.getElementById('ov').classList.remove('hidden')">Hubungkan ArsipCloud</a> untuk mengunggah</div>
       </div>
 
       <div class="drvsec">
-        <div class="drvh"><span style="font-size:22px">&#9889;</span><div style="flex:1"><h3>Supabase</h3><p>Storage + Database gratis</p></div><span class="drvcon" id="drvConBdg" style="display:none">&#9679; Live</span></div>
+        <div class="drvh"><span style="font-size:22px">&#9889;</span><div style="flex:1"><h3>ArsipCloud</h3><p>Storage + Database gratis</p></div><span class="drvcon" id="drvConBdg" style="display:none">&#9679; Live</span></div>
         <div class="drvi"><div class="drvii"><span style="font-size:17px">&#128193;</span><div><div class="drvnm">Storage Bucket</div><div class="drvmt">Berkas arsip (bucket: arsip)</div></div></div><a href="#" id="lnkBucket" target="_blank" class="bsm bdrv">Buka &#8599;</a></div>
         <div class="drvi"><div class="drvii"><span style="font-size:17px">&#128202;</span><div><div class="drvnm">Table Editor</div><div class="drvmt">Metadata arsip (arsip_files)</div></div></div><a href="#" id="lnkTable" target="_blank" class="bsm bdrv">Buka &#8599;</a></div>
-        <div class="drvi"><div class="drvii"><span style="font-size:17px">&#8987;</span><div><div class="drvnm">Project Dashboard</div><div class="drvmt">Kelola project Supabase</div></div></div><a href="#" id="lnkDash" target="_blank" class="bsm bdrv">Buka &#8599;</a></div>
-        <button class="drvall" onclick="window.open(document.getElementById('lnkDash').href,'_blank')">&#9889; Buka Dashboard Supabase &#8599;</button>
+        <div class="drvi"><div class="drvii"><span style="font-size:17px">&#8987;</span><div><div class="drvnm">Project Dashboard</div><div class="drvmt">Kelola project ArsipCloud</div></div></div><a href="#" id="lnkDash" target="_blank" class="bsm bdrv">Buka &#8599;</a></div>
+        <button class="drvall" onclick="window.open(document.getElementById('lnkDash').href,'_blank')">&#9889; Buka Dashboard ArsipCloud &#8599;</button>
       </div>
 
       <div class="stgbox"><div class="stgt">&#128190; Estimasi Kapasitas Storage (Free 1GB)</div><div class="stgbar"><div class="stgf" id="stgFill" style="width:0%"></div></div><div class="stgmt"><span id="stgUsed">&#8212; terpakai</span><span id="stgTot">&#8212; total</span></div></div>
@@ -642,8 +669,8 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
         <div class="srow"><div class="sdot ok"></div><div class="slbl">Inactivity timeout</div><div class="sval">30 menit</div></div>
         <div class="srow"><div class="sdot ok"></div><div class="slbl">Brute-force lock</div><div class="sval">5 try / 15 min</div></div>
         <div class="srow"><div class="sdot ok"></div><div class="slbl">Role-based access (RBAC)</div><div class="sval" id="secRoleVal">&#8212;</div></div>
-        <div class="srow"><div class="sdot ok"></div><div class="slbl">Backend penyimpanan</div><div class="sval">Supabase Storage + Postgres</div></div>
-        <div class="srow"><div class="sdot ok"></div><div class="slbl">Kredensial Supabase</div><div class="sval">Anon key (public) di localStorage</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Backend penyimpanan</div><div class="sval">ArsipCloud Storage + Postgres</div></div>
+        <div class="srow"><div class="sdot ok"></div><div class="slbl">Kredensial ArsipCloud</div><div class="sval">Anon key (public) di localStorage</div></div>
         <div class="srow"><div class="sdot ok"></div><div class="slbl">Content Security Policy</div><div class="sval">meta CSP header</div></div>
         <div class="srow"><div class="sdot ok"></div><div class="slbl">Input sanitization</div><div class="sval">escH() / escA()</div></div>
         <div style="margin-top:12px;display:flex;gap:7px;flex-wrap:wrap">
@@ -660,7 +687,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
   </div>
 </div>
 
-<footer>&copy; 2026 Arsip Digital Polkeslu &nbsp;&#183;&nbsp; SHA-256 Auth &nbsp;&#183;&nbsp; RBAC (Admin/Operator/Viewer) &nbsp;&#183;&nbsp; Supabase Storage</footer>
+<footer>&copy; 2026 Arsip Digital Polkeslu &nbsp;&#183;&nbsp; SHA-256 Auth &nbsp;&#183;&nbsp; RBAC (Admin/Operator/Viewer) &nbsp;&#183;&nbsp; ArsipCloud Storage</footer>
 <div class="toast" id="toastEl"></div>
 <button class="stbtn" id="stBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
 
@@ -675,13 +702,60 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
       <button onclick="closeModal('mDetail')" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&#215;</button>
     </div>
     <div id="dtRows" style="margin:12px 0"></div>
+    <div id="dtTagWrap" style="margin-bottom:10px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:5px">Tag</div>
+      <div class="tagwrap" id="dtTags"></div>
+      <div class="tageditor">
+        <input type="text" id="dtTagInp" placeholder="Tambah tag baru..." onkeydown="if(event.key==='Enter'){event.preventDefault();addTagToDetail();}">
+        <button class="bsm bbuk" onclick="addTagToDetail()">+ Tambah</button>
+      </div>
+    </div>
     <div class="mac" style="justify-content:flex-start;gap:7px;margin-top:6px">
+      <button id="dtPreview" class="bsm bbuk" style="padding:7px 12px;font-size:12px">&#128065; Preview</button>
       <a id="dtBuka" href="#" target="_blank" class="bsm bbuk" style="padding:7px 12px;font-size:12px">&#8599; Buka</a>
       <a id="dtUnduh" href="#" class="bsm bund" style="padding:7px 12px;font-size:12px">&#8595; Unduh</a>
       <button id="dtHapus" class="bsm bhap" style="padding:7px 12px;font-size:12px;display:none">&#128465; Hapus</button>
     </div>
   </div>
 </div>
+
+<!-- MODAL PREVIEW FILE -->
+<div class="mover" id="mPreview"><div class="modal wide" style="max-width:720px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 id="pvNm" style="margin:0;font-size:15px;word-break:break-word;max-width:520px"></h3>
+    <button onclick="closeModal('mPreview')" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&#215;</button>
+  </div>
+  <div id="pvBody"></div>
+  <div class="mac" style="justify-content:flex-start;margin-top:14px">
+    <a id="pvUnduh" href="#" class="bsm bund" style="padding:7px 12px;font-size:12px">&#8595; Unduh</a>
+    <button class="bcan" onclick="closeModal('mPreview')">Tutup</button>
+  </div>
+</div></div>
+
+<!-- MODAL LOG AUDIT -->
+<div class="mover" id="mAudit"><div class="modal wide" style="max-width:760px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <h3 style="margin:0">&#128220; Log Audit</h3>
+    <button onclick="closeModal('mAudit')" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&#215;</button>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+    <div class="sbar" style="flex:1;min-width:160px"><input type="text" id="audSearch" placeholder="Cari aksi, pengguna, detail..." oninput="renderAuditTable()" style="width:100%"></div>
+    <select id="audRole" class="srtsel" onchange="renderAuditTable()">
+      <option value="semua">Semua Peran</option>
+      <option value="admin">Admin</option>
+      <option value="operator">Operator</option>
+      <option value="viewer">Viewer</option>
+    </select>
+    <button class="bsm bbuk" onclick="eksporAuditCSV()">&#8595; Ekspor CSV</button>
+  </div>
+  <div style="overflow-x:auto;max-height:340px;overflow-y:auto">
+    <table class="utbl" id="audTbl">
+      <thead><tr><th>Waktu</th><th>Pengguna</th><th>Peran</th><th>Aksi</th><th>Detail</th></tr></thead>
+      <tbody id="audBody"></tbody>
+    </table>
+  </div>
+  <div style="font-size:11px;color:var(--muted);margin-top:10px" id="audCount"></div>
+</div></div>
 
 <!-- MODAL MANAJEMEN PENGGUNA -->
 <div class="mover" id="mUsers">
@@ -743,10 +817,13 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
 <!-- MODAL KONFIRMASI HAPUS USER -->
 <div class="mover" id="mDelUser"><div class="modal" style="text-align:center"><div style="font-size:36px;margin-bottom:11px">&#128465;</div><h3>Hapus Pengguna?</h3><p id="mDelTxt">Pengguna ini akan dihapus permanen.</p><div class="mac"><button class="bcan" onclick="closeModal('mDelUser')">Batal</button><button class="bdel" onclick="confirmDelUser()">Ya, Hapus</button></div></div></div>
 
-<script>window._G={ready:false,err:false};</script>
+<script>window._G={ready:false,err:false};window._Z={ready:false};</script>
 <script src="https://unpkg.com/@supabase/supabase-js@2"
   onload="window._G.ready=true;onGisOK()"
   onerror="window._G.err=true;onGisErr()"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+  onload="window._Z.ready=true"
+  onerror="window._Z.ready=false"></script>
 
 <script>
 // ═══════════════════════════════════
@@ -754,7 +831,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
 // ═══════════════════════════════════
 const BUCKET='arsip';
 const TABLE='arsip_files';
-const QUOTA_BYTES=1024*1024*1024; // 1GB Supabase free tier
+const QUOTA_BYTES=1024*1024*1024; // 1GB ArsipCloud free tier
 const SESS_TTL=8*60*60*1000;
 const INACT_TTL=30*60*1000;
 const MAX_FAILS=5;
@@ -930,7 +1007,7 @@ function applyRoleUI(){
     document.getElementById('upZone').classList.add('off');
     document.getElementById('upZone').title='Role '+RL[_sess.role]+' tidak dapat mengunggah';
   }
-  document.getElementById('btnSave').innerHTML=canUp()?'&#9729; Unggah ke Supabase':'&#128274; Role ini tidak dapat mengunggah';
+  document.getElementById('btnSave').innerHTML=canUp()?'&#9729; Unggah ke ArsipCloud':'&#128274; Role ini tidak dapat mengunggah';
 }
 
 let _stInt=null;
@@ -1083,7 +1160,7 @@ async function doChangePwd(){
 }
 
 // ═══════════════════════════════════
-// SUPABASE CONNECTION
+// ARSIPCLOUD CONNECTION
 // ═══════════════════════════════════
 let _sb=null;               // supabase client instance
 let _conn=false;            // connected flag
@@ -1110,8 +1187,8 @@ function runDiag(){
   if(proto==='file:') setD('prot','warn','Dibuka dari <code>file://</code> &#8212; sebagian browser membatasi ini, sebaiknya jalankan lewat server lokal');
   else if(proto==='http:'||proto==='https:') setD('prot','ok',`Protokol <code>${proto}//</code> valid &#10003;`);
   else setD('prot','warn','Protokol tidak dikenal: '+proto);
-  if(window._G.ready) setD('gis','ok','Supabase JS berhasil dimuat &#10003;');
-  else if(window._G.err) setD('gis','fail','Gagal memuat Supabase JS &#8212; periksa koneksi &amp; reload');
+  if(window._G.ready) setD('gis','ok','Mesin Sinkronisasi ArsipCloud berhasil dimuat &#10003;');
+  else if(window._G.err) setD('gis','fail','Gagal memuat Mesin Sinkronisasi ArsipCloud &#8212; periksa koneksi &amp; reload');
   else{setD('gis','checking','Memuat...');setTimeout(runDiag,1200);return;}
   const cid=_cid||document.getElementById('cidInp').value.trim();
   const key=_key||document.getElementById('keyInp').value.trim();
@@ -1132,7 +1209,7 @@ function valCid(inp){
   cInp.className=cid?(cidOk?'ok':'bad'):'';
   st.textContent=cid?(cidOk?'&#10003;':'&#10005;'):'';
   ht.className='fh'+(cid?cidOk?' ok':' bad':'');
-  ht.textContent=!cid?'Temukan di Supabase Dashboard &#8594; Project Settings &#8594; API':cidOk?'&#10003; Format valid':'Format salah &#8212; harus seperti https://xxxx.supabase.co';
+  ht.textContent=!cid?'Temukan di ArsipCloud Dashboard &#8594; Project Settings &#8594; API':cidOk?'&#10003; Format valid':'Format salah &#8212; harus seperti https://xxxx.supabase.co';
   kInp.className=key?(keyOk?'ok':'bad'):'';
   kst.textContent=key?(keyOk?'&#10003;':'&#10005;'):'';
   document.getElementById('btnGDrive').disabled=!(cidOk&&keyOk&&window._G.ready);
@@ -1152,7 +1229,7 @@ function onGisOK(){
   if(_key&&ki) ki.value=_key;
   if(ci) valCid(ci);
 }
-function onGisErr(){showErr('Supabase JS Gagal Dimuat','Periksa koneksi &amp; reload halaman',[]);runDiag();}
+function onGisErr(){showErr('Mesin Sinkronisasi ArsipCloud Gagal Dimuat','Periksa koneksi &amp; reload halaman',[]);runDiag();}
 function projectRef(url){try{return new URL(url).hostname.split('.')[0];}catch(e){return '';}}
 function setQuickLinks(url){
   const ref=projectRef(url);
@@ -1166,10 +1243,10 @@ async function doSupaConnect(){
   document.getElementById('ebox').classList.remove('on');
   const url=document.getElementById('cidInp').value.trim();
   const key=document.getElementById('keyInp').value.trim();
-  if(!window._G.ready){showErr('Supabase JS Belum Siap','Tunggu &amp; coba lagi',[]);return;}
+  if(!window._G.ready){showErr('Mesin Sinkronisasi ArsipCloud Belum Siap','Tunggu &amp; coba lagi',[]);return;}
   if(!url||!url.startsWith('https://')||!url.includes('.supabase.co')){showErr('Project URL Tidak Valid','Periksa Project URL, harus seperti https://xxxx.supabase.co',[]);return;}
   if(!key||key.length<20){showErr('Anon Key Tidak Valid','Periksa anon (public) key',[]);return;}
-  if(!canDrv()){toast('&#9940; Role '+RL[_sess?.role]+' tidak memerlukan Supabase.','e');return;}
+  if(!canDrv()){toast('&#9940; Role '+RL[_sess?.role]+' tidak memerlukan ArsipCloud.','e');return;}
   const btn=document.getElementById('btnGDrive');btn.disabled=true;const oldTxt=btn.innerHTML;btn.innerHTML='Menghubungkan...';
   try{
     const client=window.supabase.createClient(url,key);
@@ -1180,11 +1257,11 @@ async function doSupaConnect(){
     setQuickLinks(url);
     document.getElementById('ov').classList.add('hidden');
     updateDriveUI(true);muatArsip();subscribeRealtime();setSyncBadge('ok');
-    addAkt(`${_sess?.name||'&#8212;'} terhubung ke Supabase`,'#5c8c78');
-    toast('&#10003; Terhubung ke Supabase &#8212; kredensial disimpan, tidak perlu diisi ulang','s');
+    addAkt(`${_sess?.name||'&#8212;'} terhubung ke ArsipCloud`,'#5c8c78');
+    toast('&#10003; Terhubung ke ArsipCloud &#8212; kredensial disimpan, tidak perlu diisi ulang','s');
   }catch(e){
     showErr('Koneksi Gagal',e.message||'Periksa URL, key, dan pastikan tabel/policy sudah dibuat sesuai Panduan.',['Cek tabel `arsip_files` sudah dibuat via SQL Editor','Cek policy RLS mengizinkan akses anon','Cek Project URL &amp; anon key sudah benar']);
-    toast('&#10005; Koneksi Supabase gagal','e');
+    toast('&#10005; Koneksi ArsipCloud gagal','e');
   }
   btn.disabled=false;btn.innerHTML=oldTxt;
 }
@@ -1192,17 +1269,17 @@ function doSupaDisconnect(){
   if(_rtCh){try{_sb.removeChannel(_rtCh);}catch(e){}_rtCh=null;}
   _sb=null;_conn=false;
   _files=[];updateDriveUI(false);renderList();setSyncBadge('fail');
-  addAkt(`${_sess?.name||'&#8212;'} memutus koneksi Supabase`,'#c0392b');toast('&#128075; Terputus dari Supabase','i');
+  addAkt(`${_sess?.name||'&#8212;'} memutus koneksi ArsipCloud`,'#c0392b');toast('&#128075; Terputus dari ArsipCloud','i');
 }
 function updateDriveUI(on){
   document.getElementById('dbanner').style.display=on?'flex':'none';
   document.getElementById('drvConBdg').style.display=on?'inline-flex':'none';
-  document.getElementById('drvInd').textContent=on?'&#9679; Live (Supabase)':'';
+  document.getElementById('drvInd').textContent=on?'&#9679; Live (ArsipCloud)':'';
   const upOk=on&&canUp();
   document.getElementById('upZone').classList.toggle('off',!upOk);
   document.getElementById('lwarn').style.display=on?'none':'block';
-  document.getElementById('upHint').textContent=on?'Klik untuk pilih file':'Hubungkan Supabase untuk mengunggah';
-  document.getElementById('btnSave').innerHTML=on&&canUp()?'&#9729; Unggah ke Supabase':canUp()?'&#128274; Hubungkan Supabase dulu':'&#9940; Role ini tidak dapat mengunggah';
+  document.getElementById('upHint').textContent=on?'Klik untuk pilih file':'Hubungkan ArsipCloud untuk mengunggah';
+  document.getElementById('btnSave').innerHTML=on&&canUp()?'&#9729; Unggah ke ArsipCloud':canUp()?'&#128274; Hubungkan ArsipCloud dulu':'&#9940; Role ini tidak dapat mengunggah';
   updateQuota();
 }
 function updateQuota(){
@@ -1215,11 +1292,28 @@ function updateQuota(){
 function modeOffline(){document.getElementById('ov').classList.add('hidden');document.getElementById('lwarn').style.display='block';updateDriveUI(false);renderList();}
 
 // ═══════════════════════════════════
-// SUPABASE FILE OPERATIONS
+// ARSIPCLOUD FILE OPERATIONS
 // ═══════════════════════════════════
-let _files=[],_jenis='semua',_page=1;
+let _files=[],_jenis='semua',_page=1,_tagF='semua';
 const PER=10;
 let _delId=null,_newCt=0;
+let _selected=new Set();
+
+// ═══════════════════════════════════
+// TAGS (disimpan lokal per file, terpisah dari tabel ArsipCloud
+// agar tetap kompatibel meski kolom `tags` belum ada di database)
+// ═══════════════════════════════════
+const getTagsStore=()=>{try{return JSON.parse(localStorage.getItem('arsipTags')||'{}');}catch(e){return{};}};
+const saveTagsStore=t=>localStorage.setItem('arsipTags',JSON.stringify(t));
+function getTagsFor(fileId){return getTagsStore()[fileId]||[];}
+function setTagsFor(fileId,tags){
+  const t=getTagsStore();
+  const clean=[...new Set(tags.map(x=>x.trim()).filter(Boolean))];
+  if(clean.length) t[fileId]=clean; else delete t[fileId];
+  saveTagsStore(t);
+  return clean;
+}
+function parseTagInput(str){return (str||'').split(',').map(x=>x.trim()).filter(Boolean);}
 
 async function muatArsip(){
   if(!_sb) return;
@@ -1236,9 +1330,11 @@ async function muatArsip(){
         ukuran:fBytes(parseInt(f.size||0)),bytes:parseInt(f.size||0),
         tgl:(f.created_at||'').split('T')[0],dibuat:(f.created_at||'').split('T')[0],
         link,dl:link,path:f.storage_path,pengunggah:f.pengunggah||'',kategori:f.kategori||'',
+        tags:getTagsFor(f.id),
       };
     });
-    document.getElementById('drvInd').textContent='&#9679; Live (Supabase)';
+    _selected.clear();updateBulkBar();
+    document.getElementById('drvInd').textContent='&#9679; Live (ArsipCloud)';
     const ls=document.getElementById('lastSync');if(ls) ls.textContent='Sinkron terakhir '+new Date().toLocaleTimeString('id-ID');
     addAkt(`${_sess?.name||'&#8212;'} memuat ${_files.length} file`,'#5c8c78');
     toast(`&#10003; ${_files.length} file dimuat`,'s');
@@ -1250,10 +1346,32 @@ async function muatArsip(){
   renderList();
 }
 
+function renderTagFilterRow(){
+  const row=document.getElementById('tagfRow');
+  const allTags=new Set();_files.forEach(f=>(f.tags||[]).forEach(t=>allTags.add(t)));
+  if(!allTags.size){row.innerHTML='';return;}
+  const arr=[...allTags].sort();
+  row.innerHTML=`<span class="tagf${_tagF==='semua'?' active':''}" onclick="setTagF('semua')">&#127991; Semua Tag</span>`+
+    arr.map(t=>`<span class="tagf${_tagF===t?' active':''}" onclick="setTagF('${escA(t)}')">#${escH(t)}</span>`).join('');
+}
+function setTagF(t){_tagF=t;_page=1;renderList();}
+
+function tagChipsHtml(tags,limit){
+  if(!tags||!tags.length) return'';
+  const shown=tags.slice(0,limit||3);
+  const rest=tags.length-shown.length;
+  return `<div class="tagwrap">${shown.map(t=>`<span class="tagchip">#${escH(t)}</span>`).join('')}${rest>0?`<span class="tagchip more">+${rest}</span>`:''}</div>`;
+}
+
 function renderList(){
   const kata=document.getElementById('inpCari').value.toLowerCase();
   const srt=document.getElementById('srtBy').value;
-  let hasil=_files.filter(f=>(_jenis==='semua'||f.jenis===_jenis)&&f.nama.toLowerCase().includes(kata));
+  let hasil=_files.filter(f=>{
+    const jenisOk=_jenis==='semua'||f.jenis===_jenis;
+    const tagOk=_tagF==='semua'||(f.tags||[]).includes(_tagF);
+    const kataOk=!kata||f.nama.toLowerCase().includes(kata)||(f.tags||[]).some(t=>t.toLowerCase().includes(kata))||(f.kategori||'').toLowerCase().includes(kata);
+    return jenisOk&&tagOk&&kataOk;
+  });
   if(srt==='nama') hasil.sort((a,b)=>a.nama.localeCompare(b.nama));
   else if(srt==='terlama') hasil.sort((a,b)=>a.tgl.localeCompare(b.tgl));
   else if(srt==='ukuran') hasil.sort((a,b)=>b.bytes-a.bytes);
@@ -1262,19 +1380,22 @@ function renderList(){
   if(_page>pages) _page=pages;
   const slice=hasil.slice((_page-1)*PER,_page*PER);
   const cont=document.getElementById('listArsip');
+  renderTagFilterRow();
   if(!_conn&&_files.length===0){
-    cont.innerHTML=`<div class="empty"><span class="ei">&#128274;</span><p>Belum terhubung ke Supabase</p><small>${canDrv()?'':'Role Viewer tidak memerlukan Supabase'}</small><br><br>${canDrv()?'<button class="btn btn-acc" style="margin:0 auto" onclick="document.getElementById(\'ov\').classList.remove(\'hidden\')">&#128279; Hubungkan Supabase</button>':''}</div>`;
+    cont.innerHTML=`<div class="empty"><span class="ei">&#128274;</span><p>Belum terhubung ke ArsipCloud</p><small>${canDrv()?'':'Role Viewer tidak memerlukan ArsipCloud'}</small><br><br>${canDrv()?'<button class="btn btn-acc" style="margin:0 auto" onclick="document.getElementById(\'ov\').classList.remove(\'hidden\')">&#128279; Hubungkan ArsipCloud</button>':''}</div>`;
   }else if(!slice.length){
     cont.innerHTML=`<div class="empty"><span class="ei">&#128269;</span><p>${_files.length===0?'Belum ada file':'Tidak ditemukan'}</p><small>${_files.length===0?'Upload file pertama!':'Coba kata kunci lain'}</small></div>`;
   }else{
     cont.innerHTML=slice.map(f=>`
-    <div class="frow" onclick="openDetail('${f.id}')">
+    <div class="frow${_selected.has(f.id)?' sel':''}" onclick="openDetail('${f.id}')">
+      <input type="checkbox" class="fchk" onclick="event.stopPropagation()" onchange="toggleSelect('${f.id}',this.checked)" ${_selected.has(f.id)?'checked':''}>
       <div class="fico ${ikCls(f.jenis)}">${f.jenis==='IMG'?`<img src="${f.link}" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`:f.jenis}</div>
-      <div style="min-width:0"><div class="fnm" title="${escH(f.nama)}">${escH(f.nama)}</div><div class="fmt2">Supabase Storage</div></div>
+      <div style="min-width:0"><div class="fnm" title="${escH(f.nama)}">${escH(f.nama)}</div><div class="fmt2">ArsipCloud Storage</div>${tagChipsHtml(f.tags,3)}</div>
       <div class="fdt">${fTgl(f.tgl)}</div>
       <div class="fsz">${f.ukuran}</div>
-      <div><span class="badge bdrv2">Supabase</span></div>
+      <div><span class="badge bdrv2">ArsipCloud</span></div>
       <div class="aksi" onclick="event.stopPropagation()">
+        <button class="bsm bbuk" onclick="openPreview('${f.id}')" title="Preview">&#128065;</button>
         <a href="${f.dl}" target="_blank" class="bsm bund" onclick="logDl('${escA(f.nama)}')">&#8595;</a>
         <a href="${f.link}" target="_blank" class="bsm bbuk">&#8599;</a>
         ${canDel()?`<button class="bsm bhap" onclick="askHapus('${f.id}','${escA(f.nama)}')">&#128465;</button>`:''}
@@ -1290,49 +1411,136 @@ function renderList(){
   document.getElementById('pgInfo').textContent=total>0?`${(_page-1)*PER+1}&#8211;${Math.min(_page*PER,total)} dari ${total}`:'';
   const pb=document.getElementById('pgBtns');pb.innerHTML='';
   for(let i=1;i<=pages;i++){const b=document.createElement('button');b.className='pbtn'+(i===_page?' active':'');b.textContent=i;b.onclick=()=>{_page=i;renderList();};pb.appendChild(b);}
-  updChart();drawSparks();updateQuota();
+  updChart();drawSparks();updateQuota();updateBulkBar();
+  const chkAll=document.getElementById('chkAll');if(chkAll) chkAll.checked=slice.length>0&&slice.every(f=>_selected.has(f.id));
 }
 
 function setJenis(el,j){document.querySelectorAll('.pills .pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');_jenis=j;_page=1;renderList();}
 function doFilter(){_page=1;renderList();}
 
-function onFileSelect(){const f=document.getElementById('inpFile').files[0];if(!f) return;document.getElementById('fSelNm').textContent=f.name+' ('+fBytes(f.size)+')';document.getElementById('fSelInfo').classList.add('on');}
+// ═══════════════════════════════════
+// SELEKSI & UNDUH MASSAL (BULK)
+// ═══════════════════════════════════
+function toggleSelect(id,checked){
+  if(checked) _selected.add(id); else _selected.delete(id);
+  renderList();
+}
+function toggleSelectAll(checked){
+  const kata=document.getElementById('inpCari').value.toLowerCase();
+  const srt=document.getElementById('srtBy').value;
+  let hasil=_files.filter(f=>{
+    const jenisOk=_jenis==='semua'||f.jenis===_jenis;
+    const tagOk=_tagF==='semua'||(f.tags||[]).includes(_tagF);
+    const kataOk=!kata||f.nama.toLowerCase().includes(kata)||(f.tags||[]).some(t=>t.toLowerCase().includes(kata));
+    return jenisOk&&tagOk&&kataOk;
+  });
+  const slice=hasil.slice((_page-1)*PER,_page*PER);
+  slice.forEach(f=>{if(checked) _selected.add(f.id); else _selected.delete(f.id);});
+  renderList();
+}
+function clearSelection(){_selected.clear();renderList();}
+function updateBulkBar(){
+  const bar=document.getElementById('bulkBar');
+  if(!bar) return;
+  bar.classList.toggle('on',_selected.size>0);
+  document.getElementById('bulkCt').textContent=_selected.size;
+}
+async function bulkDownloadZip(){
+  if(!_selected.size){toast('&#9888; Pilih minimal 1 file dulu.','e');return;}
+  if(!window._Z || !window._Z.ready || typeof JSZip==='undefined'){toast('&#10005; Modul ZIP belum siap, coba lagi sesaat lagi.','e');return;}
+  const list=_files.filter(f=>_selected.has(f.id));
+  toast(`&#8987; Menyiapkan ZIP untuk ${list.length} file...`,'i');
+  const zip=new JSZip();
+  const usedNames={};
+  let ok=0,fail=0;
+  for(const f of list){
+    try{
+      const res=await fetch(f.link);
+      if(!res.ok) throw new Error('fetch gagal');
+      const blob=await res.blob();
+      let name=f.nama;
+      if(usedNames[name]!==undefined){usedNames[name]++;const parts=name.split('.');const ext=parts.length>1?'.'+parts.pop():'';name=parts.join('.')+`_${usedNames[name]}`+ext;}
+      else usedNames[name]=0;
+      zip.file(name,blob);
+      ok++;
+    }catch(e){fail++;}
+  }
+  if(ok===0){toast('&#10005; Gagal mengunduh semua file terpilih.','e');return;}
+  const content=await zip.generateAsync({type:'blob'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(content);
+  a.download=`arsip-terpilih-${Date.now()}.zip`;a.click();
+  toast(`&#8595; ZIP berisi ${ok} file diunduh${fail?` (${fail} gagal)`:''}`,'s');
+  addAkt(`${_sess?.name||'&#8212;'} unduh ${ok} file sebagai ZIP`,'#b5884a','Unduh ZIP massal');
+  clearSelection();
+}
+
+function onFileSelect(){
+  const files=document.getElementById('inpFile').files;
+  if(!files.length) return;
+  if(files.length===1){
+    document.getElementById('fSelNm').textContent=files[0].name+' ('+fBytes(files[0].size)+')';
+  }else{
+    const totalSz=[...files].reduce((s,f)=>s+f.size,0);
+    document.getElementById('fSelNm').textContent=`${files.length} file dipilih (${fBytes(totalSz)})`;
+  }
+  document.getElementById('fSelInfo').classList.add('on');
+}
+
+async function uploadSatuFile(file,upl,kat,catatan,tags){
+  const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+  const path=`${Date.now()}_${Math.random().toString(36).slice(2,7)}_${safeName}`;
+  const {error:upErr}=await _sb.storage.from(BUCKET).upload(path,file,{contentType:file.type||'application/octet-stream'});
+  if(upErr) throw upErr;
+  const row={nama:file.name,storage_path:path,mime_type:file.type||'',size:file.size,pengunggah:upl,kategori:kat,catatan,role:_sess?.role||''};
+  const {data:ins,error:insErr}=await _sb.from(TABLE).insert(row).select().single();
+  if(insErr) throw insErr;
+  const pub=_sb.storage.from(BUCKET).getPublicUrl(path);
+  const link=pub?.data?.publicUrl||'#';
+  const savedTags=tags.length?setTagsFor(ins.id,tags):[];
+  _files.unshift({id:ins.id,nama:ins.nama,jenis:getJenis(ins.mime_type,ins.nama),mimeType:ins.mime_type,ukuran:fBytes(parseInt(ins.size||0)),bytes:parseInt(ins.size||0),tgl:(ins.created_at||new Date().toISOString()).split('T')[0],dibuat:(ins.created_at||new Date().toISOString()).split('T')[0],link,dl:link,path,pengunggah:ins.pengunggah,kategori:ins.kategori,tags:savedTags});
+  _newCt++;
+}
 
 async function doUpload(){
   if(!_sb){document.getElementById('ov').classList.remove('hidden');return;}
   if(!canUp()){toast('&#9940; Role '+RL[_sess?.role]+' tidak dapat mengunggah.','e');return;}
-  const file=document.getElementById('inpFile').files[0];
+  const files=[...document.getElementById('inpFile').files];
   const upl=document.getElementById('inpUp').value.trim();
   const kat=document.getElementById('inpKat').value.trim();
-  if(!file){toast('&#9888; Pilih file dulu!','e');return;}
+  const tags=parseTagInput(document.getElementById('inpTags').value);
+  if(!files.length){toast('&#9888; Pilih file dulu!','e');return;}
   if(!upl){toast('&#9888; Isi nama pengunggah!','e');return;}
   const catatan=document.getElementById('inpCat').value.trim();
   const prog=document.getElementById('upProg'),fill=document.getElementById('pFill'),pct=document.getElementById('pPct'),lbl=document.getElementById('pLbl');
   const sP=(n,m)=>{fill.style.width=n+'%';pct.textContent=n+'%';if(m) lbl.textContent=m;};
-  prog.classList.add('on');sP(5,'Menyiapkan...');
-  try{
-    const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-    const path=`${Date.now()}_${safeName}`;
-    sP(40,'Mengunggah ke Supabase Storage...');
-    const {error:upErr}=await _sb.storage.from(BUCKET).upload(path,file,{contentType:file.type||'application/octet-stream'});
-    if(upErr) throw upErr;
-    sP(75,'Menyimpan metadata...');
-    const row={nama:file.name,storage_path:path,mime_type:file.type||'',size:file.size,pengunggah:upl,kategori:kat,catatan,role:_sess?.role||''};
-    const {data:ins,error:insErr}=await _sb.from(TABLE).insert(row).select().single();
-    if(insErr) throw insErr;
-    sP(100,'Selesai! &#10003;');
-    const pub=_sb.storage.from(BUCKET).getPublicUrl(path);
-    const link=pub?.data?.publicUrl||'#';
-    _files.unshift({id:ins.id,nama:ins.nama,jenis:getJenis(ins.mime_type,ins.nama),mimeType:ins.mime_type,ukuran:fBytes(parseInt(ins.size||0)),bytes:parseInt(ins.size||0),tgl:(ins.created_at||new Date().toISOString()).split('T')[0],dibuat:(ins.created_at||new Date().toISOString()).split('T')[0],link,dl:link,path,pengunggah:ins.pengunggah,kategori:ins.kategori});
-    _newCt++;
-    setTimeout(()=>{
-      prog.classList.remove('on');fill.style.width='0%';
-      ['inpFile','inpUp','inpKat','inpCat'].forEach(id=>{document.getElementById(id).value='';});
-      document.getElementById('fSelInfo').classList.remove('on');
-      renderList();toast('&#10003; File berhasil diunggah!','s');
-      addAkt(`${_sess?.name||upl} unggah "${file.name}"`,'#5c8c78');
-    },600);
-  }catch(e){prog.classList.remove('on');toast('&#10005; Gagal: '+(e.message||'periksa bucket & policy'),'e');}
+  prog.classList.add('on');
+  let ok=0,fail=0;
+  for(let i=0;i<files.length;i++){
+    const f=files[i];
+    const base=Math.round((i/files.length)*100);
+    sP(Math.max(5,base),files.length>1?`Mengunggah ${i+1}/${files.length}: ${f.name}`:'Mengunggah ke ArsipCloud Storage...');
+    try{
+      await uploadSatuFile(f,upl,kat,catatan,tags);
+      ok++;
+    }catch(e){
+      fail++;
+      toast(`&#10005; Gagal unggah "${f.name}": `+(e.message||'periksa bucket & policy'),'e');
+    }
+  }
+  sP(100,'Selesai! &#10003;');
+  setTimeout(()=>{
+    prog.classList.remove('on');fill.style.width='0%';
+    ['inpFile','inpUp','inpKat','inpCat','inpTags'].forEach(id=>{document.getElementById(id).value='';});
+    document.getElementById('fSelInfo').classList.remove('on');
+    renderList();
+    if(ok>0){
+      toast(files.length>1?`&#10003; ${ok} dari ${files.length} file berhasil diunggah${fail?` (${fail} gagal)`:''}`:'&#10003; File berhasil diunggah!','s');
+      addAkt(`${_sess?.name||upl} unggah ${ok} file${ok>1?' (bulk upload)':` ("${files[0].name}")`}`,'#5c8c78',files.length>1?'Bulk upload':'Unggah file');
+    }else if(fail>0){
+      toast('&#10005; Semua file gagal diunggah.','e');
+    }
+  },600);
 }
 
 function askHapus(id,nama){
@@ -1356,23 +1564,66 @@ async function confirmHapus(){
 }
 function closeModal(id){document.getElementById(id).classList.remove('on');if(id==='mHapus') _delId=null;}
 
+let _dtId=null;
+function renderDtTags(f){
+  const wrap=document.getElementById('dtTags');
+  const tags=f.tags||[];
+  wrap.innerHTML=tags.length?tags.map(t=>`<span class="tagchip">#${escH(t)} <span style="cursor:pointer;margin-left:3px" onclick="removeTagFromDetail('${escA(t)}')">&times;</span></span>`).join(''):'<span style="font-size:11px;color:var(--muted)">Belum ada tag</span>';
+}
+function addTagToDetail(){
+  const inp=document.getElementById('dtTagInp');
+  const val=inp.value.trim();if(!val) return;
+  const f=_files.find(x=>x.id===_dtId);if(!f) return;
+  const newTags=setTagsFor(f.id,[...(f.tags||[]),val]);
+  f.tags=newTags;inp.value='';renderDtTags(f);renderList();
+  addAkt(`${_sess?.name||'&#8212;'} tambah tag "#${val}" pada "${f.nama}"`,'#5c8c78','Tambah tag');
+}
+function removeTagFromDetail(tag){
+  const f=_files.find(x=>x.id===_dtId);if(!f) return;
+  const newTags=setTagsFor(f.id,(f.tags||[]).filter(t=>t!==tag));
+  f.tags=newTags;renderDtTags(f);renderList();
+  addAkt(`${_sess?.name||'&#8212;'} hapus tag "#${tag}" dari "${f.nama}"`,'#e67e22','Hapus tag');
+}
+
 function openDetail(id){
   const f=_files.find(x=>x.id===id);if(!f) return;
+  _dtId=id;
   const ik={PDF:'&#128196;',DOC:'&#128221;',XLS:'&#128202;',IMG:'&#128247;',ZIP:'&#128476;',GEN:'&#128206;'};
   document.getElementById('dtIco').innerHTML=f.jenis==='IMG'?`<img src="${f.link}" alt="" style="max-width:220px;max-height:160px;border-radius:10px;object-fit:cover;box-shadow:var(--sh)">`:(ik[f.jenis]||'&#128206;');
   document.getElementById('dtNm').textContent=f.nama;
   document.getElementById('dtBuka').href=f.link;document.getElementById('dtUnduh').href=f.dl;
   document.getElementById('dtHapus').style.display=canDel()?'':'none';
   document.getElementById('dtHapus').onclick=()=>askHapus(f.id,f.nama);
-  document.getElementById('dtRows').innerHTML=[['Jenis',f.jenis],['Ukuran',f.ukuran],['Diubah',fTgl(f.tgl)],['Dibuat',fTgl(f.dibuat)],['Pengunggah',f.pengunggah||'&#8212;'],['Kategori',f.kategori||'&#8212;'],['Backend','Supabase Storage']].map(([k,v])=>`<div class="dr"><span class="dk2">${k}</span><span class="dv2">${v}</span></div>`).join('');
+  document.getElementById('dtPreview').onclick=()=>openPreview(f.id);
+  document.getElementById('dtRows').innerHTML=[['Jenis',f.jenis],['Ukuran',f.ukuran],['Diubah',fTgl(f.tgl)],['Dibuat',fTgl(f.dibuat)],['Pengunggah',f.pengunggah||'&#8212;'],['Kategori',f.kategori||'&#8212;'],['Backend','ArsipCloud Storage']].map(([k,v])=>`<div class="dr"><span class="dk2">${k}</span><span class="dv2">${v}</span></div>`).join('');
+  renderDtTags(f);
   document.getElementById('mDetail').classList.add('on');
+}
+
+// ═══════════════════════════════════
+// PRATINJAU FILE
+// ═══════════════════════════════════
+function openPreview(id){
+  const f=_files.find(x=>x.id===id);if(!f) return;
+  document.getElementById('pvNm').textContent=f.nama;
+  document.getElementById('pvUnduh').href=f.dl;
+  const body=document.getElementById('pvBody');
+  if(f.jenis==='IMG'){
+    body.innerHTML=`<img src="${f.link}" alt="${escH(f.nama)}" style="max-width:100%;max-height:60vh;display:block;margin:0 auto;border-radius:10px;box-shadow:var(--sh)">`;
+  }else if(f.jenis==='PDF'){
+    body.innerHTML=`<iframe src="${f.link}" style="width:100%;height:60vh;border:1px solid var(--bdr);border-radius:10px;background:#fff"></iframe>`;
+  }else{
+    body.innerHTML=`<div class="empty" style="padding:36px 20px"><span class="ei">${f.jenis==='DOC'?'&#128221;':f.jenis==='XLS'?'&#128202;':f.jenis==='ZIP'?'&#128476;':'&#128206;'}</span><p>Pratinjau tidak tersedia untuk tipe file ini</p><small>Silakan unduh atau buka file untuk melihat isinya</small></div>`;
+  }
+  document.getElementById('mPreview').classList.add('on');
+  addAkt(`${_sess?.name||'&#8212;'} pratinjau "${f.nama}"`,'#7b8fc0','Preview file');
 }
 
 function eksporCSV(){
   if(!canExp()){toast('&#9940; Role ini tidak dapat mengekspor.','e');return;}
   if(!_files.length){toast('&#9888; Tidak ada data','e');return;}
-  const hdr=['No','Nama File','Jenis','Ukuran','Tanggal','Pengunggah','Kategori','Link'];
-  const rows=_files.map((f,i)=>[i+1,`"${f.nama}"`,f.jenis,f.ukuran,fTgl(f.tgl),`"${f.pengunggah||''}"`,`"${f.kategori||''}"`,f.link]);
+  const hdr=['No','Nama File','Jenis','Ukuran','Tanggal','Pengunggah','Kategori','Tag','Link'];
+  const rows=_files.map((f,i)=>[i+1,`"${f.nama}"`,f.jenis,f.ukuran,fTgl(f.tgl),`"${f.pengunggah||''}"`,`"${f.kategori||''}"`,`"${(f.tags||[]).join('; ')}"`,f.link]);
   const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
@@ -1409,10 +1660,10 @@ function drawSparks(){
 }
 
 // ═══════════════════════════════════
-// ACTIVITY
+// ACTIVITY (tampilan ringkas, 15 terbaru)
 // ═══════════════════════════════════
 let _aktCt=0;
-function addAkt(txt,col){
+function addAkt(txt,col,action){
   const box=document.getElementById('aktBox');
   if(box.querySelector('.empty')) box.innerHTML='';
   const el=document.createElement('div');el.className='ait';
@@ -1420,8 +1671,63 @@ function addAkt(txt,col){
   box.prepend(el);_aktCt++;
   if(_aktCt>15){const items=box.querySelectorAll('.ait');items[items.length-1].remove();}
   document.getElementById('jmlAkt').textContent=Math.min(_aktCt,15)+' kegiatan';
+  logAudit(action||txt,txt);
 }
-function logDl(nm){addAkt(`${_sess?.name||'&#8212;'} unduh "${nm}"`,'#b5884a');}
+function logDl(nm){addAkt(`${_sess?.name||'&#8212;'} unduh "${nm}"`,'#b5884a','Unduh file');}
+
+// ═══════════════════════════════════
+// LOG AUDIT (lengkap & dapat diekspor, tersimpan permanen di localStorage)
+// ═══════════════════════════════════
+const AUDIT_MAX=1000;
+const getAuditLog=()=>{try{return JSON.parse(localStorage.getItem('arsipAudit')||'[]');}catch(e){return[];}};
+const saveAuditLog=a=>localStorage.setItem('arsipAudit',JSON.stringify(a));
+function logAudit(action,detail){
+  const log=getAuditLog();
+  log.unshift({
+    ts:new Date().toISOString(),
+    user:_sess?.name||'&#8212;',username:_sess?.username||'&#8212;',role:_sess?.role||'&#8212;',
+    action:action||'',detail:detail||''
+  });
+  if(log.length>AUDIT_MAX) log.length=AUDIT_MAX;
+  saveAuditLog(log);
+}
+function bukaAuditLog(){
+  if(!_sess){toast('&#9940; Silakan login terlebih dahulu.','e');return;}
+  document.getElementById('audSearch').value='';
+  document.getElementById('audRole').value='semua';
+  renderAuditTable();
+  document.getElementById('mAudit').classList.add('on');
+}
+function renderAuditTable(){
+  const kata=(document.getElementById('audSearch').value||'').toLowerCase();
+  const role=document.getElementById('audRole').value;
+  let log=getAuditLog();
+  log=log.filter(l=>(role==='semua'||l.role===role)&&(!kata||(l.action+' '+l.detail+' '+l.user+' '+l.username).toLowerCase().includes(kata)));
+  const body=document.getElementById('audBody');
+  if(!log.length){
+    body.innerHTML='<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">Tidak ada catatan yang cocok</td></tr>';
+  }else{
+    body.innerHTML=log.slice(0,200).map(l=>`<tr>
+      <td style="font-size:11px;color:var(--muted);white-space:nowrap">${new Date(l.ts).toLocaleString('id-ID')}</td>
+      <td>${escH(l.user)} <span style="color:var(--muted);font-size:11px">(${escH(l.username)})</span></td>
+      <td><span class="utag ${l.role}">${RL[l.role]||l.role}</span></td>
+      <td style="font-size:12px;font-weight:500">${escH(l.action)}</td>
+      <td style="font-size:12px;color:var(--muted)">${escH(l.detail)}</td>
+    </tr>`).join('');
+  }
+  document.getElementById('audCount').textContent=`Menampilkan ${Math.min(log.length,200)} dari ${log.length} catatan${log.length>200?' (gunakan pencarian untuk mempersempit)':''}`;
+}
+function eksporAuditCSV(){
+  if(!canExp()){toast('&#9940; Role ini tidak dapat mengekspor.','e');return;}
+  const log=getAuditLog();
+  if(!log.length){toast('&#9888; Belum ada catatan audit.','e');return;}
+  const hdr=['Waktu','Nama','Username','Peran','Aksi','Detail'];
+  const rows=log.map(l=>[new Date(l.ts).toLocaleString('id-ID'),`"${l.user}"`,l.username,l.role,`"${l.action}"`,`"${(l.detail||'').replace(/"/g,'""')}"`]);
+  const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download='log-audit-arsip.csv';a.click();toast('&#8595; Log audit diekspor!','s');
+}
 function bukaSecPanel(){document.getElementById('secPanel').style.display='block';document.getElementById('secPanel').scrollIntoView({behavior:'smooth'});}
 
 // ═══════════════════════════════════
@@ -1493,8 +1799,8 @@ async function autoConnect(silent){
 function setSyncBadge(st){
   const b=document.getElementById('syncBadge');if(!b) return;
   b.classList.remove('sb-ok','sb-fail','sb-connecting');
-  if(st==='connecting'){b.classList.add('sb-connecting');b.innerHTML='<span class="sb-dot"></span> Menyambungkan ke Supabase&#8230;';}
-  else if(st==='ok'){b.classList.add('sb-ok');b.innerHTML='<span class="sb-dot"></span> Tersambung otomatis ke Supabase';}
+  if(st==='connecting'){b.classList.add('sb-connecting');b.innerHTML='<span class="sb-dot"></span> Menyambungkan ke ArsipCloud&#8230;';}
+  else if(st==='ok'){b.classList.add('sb-ok');b.innerHTML='<span class="sb-dot"></span> Tersambung otomatis ke ArsipCloud';}
   else{b.classList.add('sb-fail');b.innerHTML='<span class="sb-dot"></span> Belum tersambung &#8212; <a onclick="document.getElementById(\'ov\').classList.remove(\'hidden\')">hubungkan</a>';}
 }
 let _rtCh=null;
@@ -1504,7 +1810,7 @@ function subscribeRealtime(){
     _rtCh=_sb.channel('arsip-realtime')
       .on('postgres_changes',{event:'*',schema:'public',table:TABLE},payload=>{
         muatArsip();
-        if(payload.eventType==='INSERT') addAkt('File baru tersinkron dari Supabase: '+(payload.new?.nama||''),'#1a73e8');
+        if(payload.eventType==='INSERT') addAkt('File baru tersinkron dari ArsipCloud: '+(payload.new?.nama||''),'#1a73e8');
       })
       .subscribe();
   }catch(e){/* realtime opsional, abaikan jika gagal */}
