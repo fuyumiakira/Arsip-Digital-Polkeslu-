@@ -1659,18 +1659,23 @@ function askHapus(id,nama){
   closeModal('mDetail');document.getElementById('mHapus').classList.add('on');
 }
 async function confirmHapus(){
-  if(!_delId) return;closeModal('mHapus');
-  const f=_files.find(x=>x.id===_delId);
+  if(!_delId) return;
+  const delId=_delId;            // simpan ID sebelum modal ditutup, karena closeModal('mHapus') me-reset _delId
+  closeModal('mHapus');
+  const f=_files.find(x=>x.id===delId);
   if(_sb&&f){
     try{
       const {error:sErr}=await _sb.storage.from(BUCKET).remove([f.path]);
       if(sErr) throw sErr;
-      const {error:dErr}=await _sb.from(TABLE).delete().eq('id',_delId);
+      const {error:dErr}=await _sb.from(TABLE).delete().eq('id',delId);
       if(dErr) throw dErr;
-    }catch(e){toast('&#10005; Gagal hapus: '+(e.message||'periksa policy'),'e');_delId=null;return;}
+    }catch(e){toast('&#10005; Gagal hapus: '+(e.message||'periksa policy'),'e');return;}
   }
-  if(f) addAkt(`${_sess?.name||'&#8212;'} hapus "${f.nama}"`,'#c0392b');
-  _files=_files.filter(x=>x.id!==_delId);_delId=null;renderList();toast('&#128465; File dihapus','i');
+  if(!f){toast('&#9888; File tidak ditemukan, mungkin sudah terhapus sebelumnya.','e');return;}
+  addAkt(`${_sess?.name||'&#8212;'} hapus "${f.nama}"`,'#c0392b');
+  _files=_files.filter(x=>x.id!==delId);
+  _selected.delete(delId);
+  renderList();toast('&#128465; File dihapus','i');
 }
 function closeModal(id){document.getElementById(id).classList.remove('on');if(id==='mHapus') _delId=null;}
 
