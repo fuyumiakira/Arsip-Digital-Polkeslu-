@@ -148,8 +148,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 [data-theme=dark] .gtag.ok{background:rgba(52,168,83,.18);color:#6fcf97}
 
 /* NAVBAR */
-nav{background:var(--nav);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200}
-.nav-logo{font-family:'Fraunces',serif;font-size:20px;color:#fff}
+nav{background:linear-gradient(180deg,var(--nav),#0e0e11 130%);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:200;box-shadow:0 1px 0 rgba(255,255,255,.06),0 10px 24px rgba(0,0,0,.18);border-bottom:1px solid rgba(255,255,255,.05)}
+.nav-logo{font-family:'Fraunces',serif;font-size:21px;color:#fff;display:flex;align-items:center;gap:9px;letter-spacing:.01em}
+.nav-logo::before{content:'';width:9px;height:9px;border-radius:3px;background:linear-gradient(135deg,var(--accent),#d4a86a);display:inline-block;transform:rotate(45deg)}
 .nav-logo em{color:var(--accent);font-style:italic}
 .nav-links{display:flex;gap:4px}
 .nav-links a{color:rgba(255,255,255,.55);text-decoration:none;font-size:13px;padding:7px 14px;border-radius:8px;transition:all .2s;cursor:pointer}
@@ -174,8 +175,20 @@ nav{background:var(--nav);padding:0 40px;display:flex;align-items:center;justify
 .sinfo.warn{color:#f39c12;border-color:rgba(243,156,18,.25)}
 .sinfo.crit{color:var(--danger);border-color:rgba(231,76,60,.25)}
 
+/* SYNC BADGE */
+.sync-badge{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.08)}
+.sync-badge a{color:#74b2ff;cursor:pointer;font-weight:600}
+.sb-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);flex-shrink:0}
+.sync-badge.sb-ok{background:rgba(52,168,83,.1);color:#6fcf97;border-color:rgba(52,168,83,.25)}
+.sync-badge.sb-ok .sb-dot{background:#34a853;animation:pls 2s infinite}
+.sync-badge.sb-connecting{background:rgba(26,115,232,.1);color:#74b2ff;border-color:rgba(26,115,232,.25)}
+.sync-badge.sb-connecting .sb-dot{background:#1a73e8;animation:spin2b 1s linear infinite}
+.sync-badge.sb-fail{background:rgba(230,126,34,.1);color:#f0a860;border-color:rgba(230,126,34,.25)}
+.sync-badge.sb-fail .sb-dot{background:#e67e22}
+@keyframes spin2b{to{transform:rotate(360deg)}}
+
 /* DRIVE BANNER */
-.dbanner{background:rgba(52,168,83,.05);border:1px solid rgba(52,168,83,.2);border-radius:12px;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.dbanner{background:linear-gradient(135deg,rgba(52,168,83,.07),rgba(52,168,83,.02));border:1px solid rgba(52,168,83,.2);border-radius:14px;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap;box-shadow:var(--sh)}
 .ddot{width:8px;height:8px;border-radius:50%;background:var(--grn);flex-shrink:0;animation:pls 2s infinite}
 @keyframes pls{0%,100%{box-shadow:0 0 0 0 rgba(52,168,83,.4)}50%{box-shadow:0 0 0 5px rgba(52,168,83,0)}}
 .dbi{display:flex;align-items:center;gap:10px}
@@ -188,8 +201,8 @@ nav{background:var(--nav);padding:0 40px;display:flex;align-items:center;justify
 /* LAYOUT */
 .container{max-width:1180px;margin:0 auto;padding:30px 24px}
 .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-.page-header h1{font-family:'Fraunces',serif;font-size:28px;font-weight:600}
-.page-header p{font-size:13px;color:var(--muted);margin-top:3px}
+.page-header h1{font-family:'Fraunces',serif;font-size:29px;font-weight:600;letter-spacing:-.01em}
+.page-header p{font-size:13px;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:8px}
 .btn-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 17px;border-radius:9px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;cursor:pointer;border:none;transition:all .2s;text-decoration:none}
 .btn-dark{background:var(--dark);color:var(--bg)}.btn-dark:hover{opacity:.85}
@@ -205,18 +218,21 @@ nav{background:var(--nav);padding:0 40px;display:flex;align-items:center;justify
 [data-theme=dark] .bbuk{background:rgba(26,115,232,.18);color:#74b2ff}
 [data-theme=dark] .bdrv{background:#1e2030;color:#74b2ff;border-color:#1a2a4a}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.stat{background:var(--card);border-radius:14px;padding:18px 20px;border:1px solid var(--bdr);position:relative;overflow:hidden;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s}
-.stat:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.09)}
+.stat{background:var(--card);border-radius:16px;padding:19px 20px;border:1px solid var(--bdr);position:relative;overflow:hidden;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s}
+.stat:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.1)}
 .stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
 .stat:nth-child(1)::after{background:var(--accent)}.stat:nth-child(2)::after{background:var(--a2)}
 .stat:nth-child(3)::after{background:#c07b7b}.stat:nth-child(4)::after{background:#7b8fc0}
 .st-top{display:flex;justify-content:space-between;align-items:flex-start}
-.st-em{font-size:22px}
+.st-em{font-size:18px;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:rgba(181,136,74,.1)}
+.stat:nth-child(2) .st-em{background:rgba(92,140,120,.12)}
+.stat:nth-child(3) .st-em{background:rgba(192,123,123,.12)}
+.stat:nth-child(4) .st-em{background:rgba(123,143,192,.12)}
 .st-sp{display:flex;align-items:flex-end;gap:2px;height:28px}
 .spk{width:5px;border-radius:2px}
-.st-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:10px 0 4px}
+.st-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:12px 0 4px;font-weight:600}
 .st-num{font-family:'Fraunces',serif;font-size:32px;color:var(--text);font-weight:600;line-height:1}
-.st-note{font-size:11px;color:var(--a2);margin-top:5px}
+.st-note{font-size:11px;color:var(--a2);margin-top:6px;font-weight:500}
 .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
 .cpanel{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:18px;box-shadow:var(--sh)}
 .cpanel h4{font-size:13px;font-weight:600;margin-bottom:12px}
@@ -240,7 +256,7 @@ nav{background:var(--nav);padding:0 40px;display:flex;align-items:center;justify
 .frow{display:grid;grid-template-columns:36px 1fr 90px 70px 80px 105px;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--bdr);transition:background .15s;cursor:pointer}
 .frow:last-child{border-bottom:none}
 .frow:hover{background:rgba(181,136,74,.04)}
-.fico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.fico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;overflow:hidden}
 .f-pdf{background:#fdecea;color:#c0392b}.f-doc{background:#e8f4fd;color:#2471a3}.f-xls{background:#eafaf1;color:#1e8449}
 .f-img{background:#fef9e7;color:#b7950b}.f-zip{background:#f5eef8;color:#7d3c98}.f-gen{background:#f0f0f0;color:#555}
 [data-theme=dark] .f-pdf{background:rgba(192,57,43,.2)}[data-theme=dark] .f-doc{background:rgba(36,113,163,.2)}
@@ -429,7 +445,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
 </div>
 
 <!-- SETUP OVERLAY z:1000 -->
-<div class="ov" id="ov">
+<div class="ov hidden" id="ov">
   <div class="scard">
     <div class="sh">
       <div style="font-size:28px">&#128194;</div>
@@ -512,6 +528,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
     <a onclick="bukaSecPanel()">&#128274; Keamanan</a>
   </div>
   <div class="nav-right">
+    <span class="sync-badge sb-fail" id="syncBadge"><span class="sb-dot"></span> Memeriksa koneksi&#8230;</span>
     <span class="sinfo" id="sinfo">&#8987; <span id="scd">&#8212;</span></span>
     <span class="tbadge" id="tbadge">&#8212;</span>
     <button class="dtog" onclick="toggleDark()" id="dBtn">&#127769;</button>
@@ -535,7 +552,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
   <div class="dbanner" id="dbanner" style="display:none">
     <div class="dbi"><div class="ddot"></div>
       <div><span id="drvUserInfo">Terhubung ke Supabase</span>
-        <small>Bucket: arsip &nbsp;&#183;&nbsp; <span class="stag">&#128274; Storage + DB</span></small>
+        <small>Bucket: arsip &nbsp;&#183;&nbsp; <span class="stag">&#128274; Storage + DB</span> &nbsp;&#183;&nbsp; <span id="lastSync">Sinkron otomatis aktif</span></small>
       </div>
     </div>
     <div class="dba">
@@ -900,6 +917,12 @@ function onSessStart(){
   applyRoleUI();
   renderList();updChart();drawSparks();
   initInact();
+  if(canDrv()){
+    document.getElementById('syncBadge').style.display='inline-flex';
+    if(!_conn) autoConnect();
+  }else{
+    document.getElementById('syncBadge').style.display='none';
+  }
 }
 
 function applyRoleUI(){
@@ -1156,9 +1179,9 @@ async function doSupaConnect(){
     localStorage.setItem('arsipSbUrl',url);localStorage.setItem('arsipSbKey',key);
     setQuickLinks(url);
     document.getElementById('ov').classList.add('hidden');
-    updateDriveUI(true);muatArsip();
+    updateDriveUI(true);muatArsip();subscribeRealtime();setSyncBadge('ok');
     addAkt(`${_sess?.name||'&#8212;'} terhubung ke Supabase`,'#5c8c78');
-    toast('&#10003; Terhubung ke Supabase','s');
+    toast('&#10003; Terhubung ke Supabase &#8212; kredensial disimpan, tidak perlu diisi ulang','s');
   }catch(e){
     showErr('Koneksi Gagal',e.message||'Periksa URL, key, dan pastikan tabel/policy sudah dibuat sesuai Panduan.',['Cek tabel `arsip_files` sudah dibuat via SQL Editor','Cek policy RLS mengizinkan akses anon','Cek Project URL &amp; anon key sudah benar']);
     toast('&#10005; Koneksi Supabase gagal','e');
@@ -1166,8 +1189,9 @@ async function doSupaConnect(){
   btn.disabled=false;btn.innerHTML=oldTxt;
 }
 function doSupaDisconnect(){
+  if(_rtCh){try{_sb.removeChannel(_rtCh);}catch(e){}_rtCh=null;}
   _sb=null;_conn=false;
-  _files=[];updateDriveUI(false);renderList();
+  _files=[];updateDriveUI(false);renderList();setSyncBadge('fail');
   addAkt(`${_sess?.name||'&#8212;'} memutus koneksi Supabase`,'#c0392b');toast('&#128075; Terputus dari Supabase','i');
 }
 function updateDriveUI(on){
@@ -1215,6 +1239,7 @@ async function muatArsip(){
       };
     });
     document.getElementById('drvInd').textContent='&#9679; Live (Supabase)';
+    const ls=document.getElementById('lastSync');if(ls) ls.textContent='Sinkron terakhir '+new Date().toLocaleTimeString('id-ID');
     addAkt(`${_sess?.name||'&#8212;'} memuat ${_files.length} file`,'#5c8c78');
     toast(`&#10003; ${_files.length} file dimuat`,'s');
   }catch(e){
@@ -1244,7 +1269,7 @@ function renderList(){
   }else{
     cont.innerHTML=slice.map(f=>`
     <div class="frow" onclick="openDetail('${f.id}')">
-      <div class="fico ${ikCls(f.jenis)}">${f.jenis}</div>
+      <div class="fico ${ikCls(f.jenis)}">${f.jenis==='IMG'?`<img src="${f.link}" loading="lazy" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`:f.jenis}</div>
       <div style="min-width:0"><div class="fnm" title="${escH(f.nama)}">${escH(f.nama)}</div><div class="fmt2">Supabase Storage</div></div>
       <div class="fdt">${fTgl(f.tgl)}</div>
       <div class="fsz">${f.ukuran}</div>
@@ -1334,7 +1359,7 @@ function closeModal(id){document.getElementById(id).classList.remove('on');if(id
 function openDetail(id){
   const f=_files.find(x=>x.id===id);if(!f) return;
   const ik={PDF:'&#128196;',DOC:'&#128221;',XLS:'&#128202;',IMG:'&#128247;',ZIP:'&#128476;',GEN:'&#128206;'};
-  document.getElementById('dtIco').innerHTML=ik[f.jenis]||'&#128206;';
+  document.getElementById('dtIco').innerHTML=f.jenis==='IMG'?`<img src="${f.link}" alt="" style="max-width:220px;max-height:160px;border-radius:10px;object-fit:cover;box-shadow:var(--sh)">`:(ik[f.jenis]||'&#128206;');
   document.getElementById('dtNm').textContent=f.nama;
   document.getElementById('dtBuka').href=f.link;document.getElementById('dtUnduh').href=f.dl;
   document.getElementById('dtHapus').style.display=canDel()?'':'none';
@@ -1447,21 +1472,52 @@ function scrollUp(){document.getElementById('upSec').scrollIntoView({behavior:'s
 // ═══════════════════════════════════
 // INIT
 // ═══════════════════════════════════
-async function autoConnect(){
-  if(!_cid||!_key||!window._G.ready) return;
+async function autoConnect(silent){
+  if(!_cid||!_key||!window._G.ready) return false;
+  if(!silent) setSyncBadge('connecting');
   try{
     const client=window.supabase.createClient(_cid,_key);
     const {error}=await client.from(TABLE).select('id',{count:'exact',head:true});
     if(error&&error.code!=='PGRST116') throw error;
     _sb=client;_conn=true;setQuickLinks(_cid);
-    updateDriveUI(true);muatArsip();
-  }catch(e){/* silent — user can reconnect via tab Hubungkan */}
+    document.getElementById('ov').classList.add('hidden');
+    updateDriveUI(true);muatArsip();subscribeRealtime();
+    setSyncBadge('ok');
+    return true;
+  }catch(e){
+    setSyncBadge('fail');
+    return false;
+    /* silent — user can reconnect via tab Hubungkan */
+  }
+}
+function setSyncBadge(st){
+  const b=document.getElementById('syncBadge');if(!b) return;
+  b.classList.remove('sb-ok','sb-fail','sb-connecting');
+  if(st==='connecting'){b.classList.add('sb-connecting');b.innerHTML='<span class="sb-dot"></span> Menyambungkan ke Supabase&#8230;';}
+  else if(st==='ok'){b.classList.add('sb-ok');b.innerHTML='<span class="sb-dot"></span> Tersambung otomatis ke Supabase';}
+  else{b.classList.add('sb-fail');b.innerHTML='<span class="sb-dot"></span> Belum tersambung &#8212; <a onclick="document.getElementById(\'ov\').classList.remove(\'hidden\')">hubungkan</a>';}
+}
+let _rtCh=null;
+function subscribeRealtime(){
+  if(!_sb||_rtCh) return;
+  try{
+    _rtCh=_sb.channel('arsip-realtime')
+      .on('postgres_changes',{event:'*',schema:'public',table:TABLE},payload=>{
+        muatArsip();
+        if(payload.eventType==='INSERT') addAkt('File baru tersinkron dari Supabase: '+(payload.new?.nama||''),'#1a73e8');
+      })
+      .subscribe();
+  }catch(e){/* realtime opsional, abaikan jika gagal */}
 }
 (async()=>{
   await initUsers();
   const s=getSess();
-  if(s){_sess=s;document.getElementById('lo').classList.add('hidden');onSessStart();if(canDrv()) autoConnect();}
-  else{document.getElementById('lo').classList.remove('hidden');updABar();if(isLocked()) startLock();}
+  if(s){
+    _sess=s;document.getElementById('lo').classList.add('hidden');onSessStart();
+  }else{
+    document.getElementById('lo').classList.remove('hidden');updABar();if(isLocked()) startLock();
+    document.getElementById('syncBadge').style.display='none';
+  }
   const ci=document.getElementById('cidInp'),ki=document.getElementById('keyInp');
   if(_cid&&ci) ci.value=_cid;
   if(_key&&ki) ki.value=_key;
