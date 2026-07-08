@@ -237,6 +237,9 @@ nav{background:linear-gradient(180deg,var(--nav),#0e0e11 130%);padding:0 40px;di
 .cpanel{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:18px;box-shadow:var(--sh)}
 .cpanel h4{font-size:13px;font-weight:600;margin-bottom:12px}
 .cwrap{position:relative;height:180px}
+.cwrap canvas{cursor:pointer}
+.datef-chip{display:inline-flex;align-items:center;gap:8px;background:var(--blt);border:1px solid rgba(26,115,232,.25);color:var(--blue);font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;margin:0 18px 10px}
+.datef-chip button{background:none;border:none;color:inherit;cursor:pointer;font-size:13px;font-weight:700;line-height:1;padding:0}
 .grid2{display:grid;grid-template-columns:1fr 300px;gap:16px}
 .rcol{display:flex;flex-direction:column}
 .panel{background:var(--card);border-radius:14px;border:1px solid var(--bdr);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh)}
@@ -252,6 +255,10 @@ nav{background:linear-gradient(180deg,var(--nav),#0e0e11 130%);padding:0 40px;di
 .pill.active{background:rgba(181,136,74,.1);border-color:var(--accent);color:var(--accent)}
 .pdot{width:6px;height:6px;border-radius:50%}
 .thead{display:grid;grid-template-columns:22px 36px 1fr 90px 70px 80px 130px;gap:10px;padding:7px 18px;background:var(--bg);border-bottom:1px solid var(--bdr)}
+.th.srtc{cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px;transition:color .15s}
+.th.srtc:hover{color:var(--accent)}
+.sarr{font-size:9px;opacity:.25;transition:opacity .15s}
+.sarr.on{opacity:1;color:var(--accent);font-weight:700}
 .th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .frow{display:grid;grid-template-columns:22px 36px 1fr 90px 70px 80px 130px;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--bdr);transition:background .15s;cursor:pointer}
 .frow.sel{background:rgba(26,115,232,.06)}
@@ -269,6 +276,11 @@ nav{background:linear-gradient(180deg,var(--nav),#0e0e11 130%);padding:0 40px;di
 .fdt,.fsz{font-size:11px;color:var(--muted)}
 .badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600}
 .bdrv2{background:rgba(26,115,232,.1);color:#1a73e8}
+.badge.btag{background:rgba(92,140,120,.12);color:var(--a2);cursor:pointer;transition:opacity .15s}
+.badge.btag:hover{opacity:.75}
+[data-theme=dark] .badge.btag{background:rgba(111,207,151,.14);color:#6fcf97}
+.badge.bnone{background:var(--bg);color:var(--muted);border:1px dashed var(--bdr);font-weight:500;cursor:default}
+.badge.bmore{background:var(--bg);color:var(--muted);cursor:default;margin-left:3px}
 .aksi{display:flex;gap:4px}
 .tagwrap{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
 .tagchip{display:inline-flex;align-items:center;padding:1px 7px;border-radius:10px;font-size:9.5px;font-weight:600;background:rgba(92,140,120,.12);color:var(--a2);white-space:nowrap}
@@ -301,8 +313,10 @@ nav{background:linear-gradient(180deg,var(--nav),#0e0e11 130%);padding:0 40px;di
 .upzone{border:2px dashed rgba(181,136,74,.35);border-radius:12px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:11px;position:relative}
 .upzone:hover:not(.off){border-color:var(--accent);background:rgba(181,136,74,.04)}
 .upzone.off{opacity:.4;pointer-events:none}
+.upzone.dragover{border-color:var(--accent);border-style:solid;background:rgba(181,136,74,.09);transform:scale(1.015)}
+.upzone.dragover .upico{transform:scale(1.15) translateY(-2px)}
 .upzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
-.upico{font-size:22px;display:block;margin-bottom:6px}
+.upico{font-size:22px;display:block;margin-bottom:6px;transition:transform .2s}
 .upzone h4{font-size:13px;font-weight:600;margin-bottom:3px}
 .upzone p{font-size:11px;color:var(--muted)}
 .fmts{display:flex;gap:5px;justify-content:center;margin-top:8px;flex-wrap:wrap}
@@ -558,7 +572,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
 
 <div class="container">
   <div class="page-header">
-    <div><h1>Dashboard Arsip</h1><p id="tglHari"></p></div>
+    <div><h1>Dashboard Arsip</h1><p id="tglHari"></p><p id="jamRT" style="font-size:12px;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums"></p></div>
     <div class="btn-group">
       <button class="btn btn-out" id="btnCsv" onclick="eksporCSV()">&#8595; CSV</button>
       <button class="btn btn-out" onclick="muatArsip()">&#8635; Refresh</button>
@@ -587,7 +601,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
 
   <div class="chart-row">
     <div class="cpanel"><h4>&#128202; Distribusi Jenis File</h4><div class="cwrap"><canvas id="cJenis"></canvas></div></div>
-    <div class="cpanel"><h4>&#128197; Upload 7 Hari</h4><div class="cwrap"><canvas id="cMgg"></canvas></div></div>
+    <div class="cpanel"><h4>&#128197; Upload 7 Hari Terakhir</h4><div class="cwrap"><canvas id="cMgg"></canvas></div></div>
   </div>
 
   <div class="grid2">
@@ -597,7 +611,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
           <h3>&#128203; Daftar Arsip <span id="drvInd" style="font-size:10px;font-weight:400;color:#34a853;margin-left:5px"></span></h3>
           <div class="tlbar">
             <div class="sbar">&#128269; <input type="text" id="inpCari" placeholder="Cari arsip..." oninput="doFilter()"></div>
-            <select id="srtBy" class="srtsel" onchange="doFilter()">
+            <select id="srtBy" class="srtsel" onchange="applySortSelect()">
               <option value="terbaru">Terbaru</option>
               <option value="terlama">Terlama</option>
               <option value="nama">Nama A&#8211;Z</option>
@@ -606,14 +620,15 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
           </div>
         </div>
         <div class="pills">
-          <span class="pill active" onclick="setJenis(this,'semua')"><span class="pdot" style="background:var(--accent)"></span>Semua</span>
-          <span class="pill" onclick="setJenis(this,'PDF')"><span class="pdot" style="background:#c0392b"></span>PDF</span>
-          <span class="pill" onclick="setJenis(this,'DOC')"><span class="pdot" style="background:#2471a3"></span>Dokumen</span>
-          <span class="pill" onclick="setJenis(this,'XLS')"><span class="pdot" style="background:#1e8449"></span>Spreadsheet</span>
-          <span class="pill" onclick="setJenis(this,'IMG')"><span class="pdot" style="background:#b7950b"></span>Gambar</span>
-          <span class="pill" onclick="setJenis(this,'ZIP')"><span class="pdot" style="background:#7d3c98"></span>Zip</span>
+          <span class="pill active" data-j="semua" onclick="setJenis(this,'semua')"><span class="pdot" style="background:var(--accent)"></span>Semua</span>
+          <span class="pill" data-j="PDF" onclick="setJenis(this,'PDF')"><span class="pdot" style="background:#c0392b"></span>PDF</span>
+          <span class="pill" data-j="DOC" onclick="setJenis(this,'DOC')"><span class="pdot" style="background:#2471a3"></span>Dokumen</span>
+          <span class="pill" data-j="XLS" onclick="setJenis(this,'XLS')"><span class="pdot" style="background:#1e8449"></span>Spreadsheet</span>
+          <span class="pill" data-j="IMG" onclick="setJenis(this,'IMG')"><span class="pdot" style="background:#b7950b"></span>Gambar</span>
+          <span class="pill" data-j="ZIP" onclick="setJenis(this,'ZIP')"><span class="pdot" style="background:#7d3c98"></span>Zip</span>
         </div>
         <div class="tagf-row" id="tagfRow"></div>
+        <div class="datef-chip" id="dateFChip" style="display:none"></div>
         <div class="bulkbar" id="bulkBar">
           <span><b id="bulkCt">0</b> file dipilih</span>
           <div class="bulkact">
@@ -621,7 +636,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
             <button class="bsm bcan" style="background:var(--bg);color:var(--text)" onclick="clearSelection()">Batal</button>
           </div>
         </div>
-        <div class="thead"><div class="th"><input type="checkbox" class="fchk" id="chkAll" onchange="toggleSelectAll(this.checked)" title="Pilih semua"></div><div class="th"></div><div class="th">Nama File</div><div class="th">Tanggal</div><div class="th">Ukuran</div><div class="th">Tipe</div><div class="th">Aksi</div></div>
+        <div class="thead"><div class="th"><input type="checkbox" class="fchk" id="chkAll" onchange="toggleSelectAll(this.checked)" title="Pilih semua"></div><div class="th"></div><div class="th srtc" onclick="setSortCol('nama')">Nama File <span class="sarr" id="sa-nama">&#8645;</span></div><div class="th srtc" onclick="setSortCol('tgl')">Tanggal <span class="sarr" id="sa-tgl">&#8645;</span></div><div class="th srtc" onclick="setSortCol('ukuran')">Ukuran <span class="sarr" id="sa-ukuran">&#8645;</span></div><div class="th">Tag</div><div class="th">Aksi</div></div>
         <div id="listArsip"></div>
         <div class="pages"><span id="pgInfo"></span><div class="pbtns" id="pgBtns"></div></div>
       </div>
@@ -632,8 +647,8 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--muted);border-t
         <h3>&#128193; Upload Arsip ke ArsipCloud</h3>
         <div class="upzone off" id="upZone">
           <input type="file" id="inpFile" onchange="onFileSelect()" accept="*/*" multiple>
-          <span class="upico">&#9729;</span>
-          <h4>Pilih atau Seret File</h4>
+          <span class="upico" id="upIco">&#9729;</span>
+          <h4 id="upTitle">Pilih atau Seret File</h4>
           <p id="upHint">Hubungkan ArsipCloud untuk mengunggah</p>
           <div class="fmts"><span class="fmtl">PDF</span><span class="fmtl">DOCX</span><span class="fmtl">XLSX</span><span class="fmtl">JPG</span><span class="fmtl">ZIP</span></div>
         </div>
@@ -1294,7 +1309,7 @@ function modeOffline(){document.getElementById('ov').classList.add('hidden');doc
 // ═══════════════════════════════════
 // ARSIPCLOUD FILE OPERATIONS
 // ═══════════════════════════════════
-let _files=[],_jenis='semua',_page=1,_tagF='semua';
+let _files=[],_jenis='semua',_page=1,_tagF='semua',_filteredFiles=[],_dateF=null;
 const PER=10;
 let _delId=null,_newCt=0;
 let _selected=new Set();
@@ -1362,20 +1377,60 @@ function tagChipsHtml(tags,limit){
   const rest=tags.length-shown.length;
   return `<div class="tagwrap">${shown.map(t=>`<span class="tagchip">#${escH(t)}</span>`).join('')}${rest>0?`<span class="tagchip more">+${rest}</span>`:''}</div>`;
 }
+function tagColHtml(tags){
+  if(!tags||!tags.length) return `<span class="badge bnone">Tanpa tag</span>`;
+  const first=tags[0],rest=tags.length-1;
+  const title=rest>0?tags.slice(1).map(t=>'#'+t).join(', '):'';
+  return `<span class="badge btag" onclick="event.stopPropagation();setTagF('${escA(first)}')" title="Filter file dengan tag #${escH(first)}">#${escH(first)}</span>`+
+    (rest>0?`<span class="badge bmore" title="${escH(title)}">+${rest}</span>`:'');
+}
 
+let _sortKey='tgl',_sortDir='desc';
+function setSortCol(key){
+  if(_sortKey===key){_sortDir=_sortDir==='asc'?'desc':'asc';}
+  else{_sortKey=key;_sortDir=(key==='nama')?'asc':'desc';}
+  syncSortUI();_page=1;renderList();
+}
+function applySortSelect(){
+  const v=document.getElementById('srtBy').value;
+  if(v==='nama'){_sortKey='nama';_sortDir='asc';}
+  else if(v==='terlama'){_sortKey='tgl';_sortDir='asc';}
+  else if(v==='ukuran'){_sortKey='ukuran';_sortDir='desc';}
+  else{_sortKey='tgl';_sortDir='desc';}
+  syncSortUI();_page=1;renderList();
+}
+function syncSortUI(){
+  const sel=document.getElementById('srtBy');
+  if(sel){
+    if(_sortKey==='nama') sel.value='nama';
+    else if(_sortKey==='ukuran') sel.value='ukuran';
+    else sel.value=_sortDir==='asc'?'terlama':'terbaru';
+  }
+  ['nama','tgl','ukuran'].forEach(k=>{
+    const el=document.getElementById('sa-'+k);if(!el) return;
+    if(k===_sortKey){el.textContent=_sortDir==='asc'?'\u2191':'\u2193';el.classList.add('on');}
+    else{el.textContent='\u21c5';el.classList.remove('on');}
+  });
+}
 function renderList(){
   const kata=document.getElementById('inpCari').value.toLowerCase();
-  const srt=document.getElementById('srtBy').value;
   let hasil=_files.filter(f=>{
     const jenisOk=_jenis==='semua'||f.jenis===_jenis;
     const tagOk=_tagF==='semua'||(f.tags||[]).includes(_tagF);
+    const dateOk=!_dateF||f.tgl===_dateF;
     const kataOk=!kata||f.nama.toLowerCase().includes(kata)||(f.tags||[]).some(t=>t.toLowerCase().includes(kata))||(f.kategori||'').toLowerCase().includes(kata);
-    return jenisOk&&tagOk&&kataOk;
+    return jenisOk&&tagOk&&dateOk&&kataOk;
   });
-  if(srt==='nama') hasil.sort((a,b)=>a.nama.localeCompare(b.nama));
-  else if(srt==='terlama') hasil.sort((a,b)=>a.tgl.localeCompare(b.tgl));
-  else if(srt==='ukuran') hasil.sort((a,b)=>b.bytes-a.bytes);
-  else hasil.sort((a,b)=>b.tgl.localeCompare(a.tgl));
+  hasil.sort((a,b)=>{
+    let r=0;
+    if(_sortKey==='nama') r=a.nama.localeCompare(b.nama);
+    else if(_sortKey==='ukuran') r=a.bytes-b.bytes;
+    else r=a.tgl.localeCompare(b.tgl);
+    return _sortDir==='asc'?r:-r;
+  });
+  _filteredFiles=hasil;
+  syncSortUI();
+  renderDateChip();
   const total=hasil.length,pages=Math.max(1,Math.ceil(total/PER));
   if(_page>pages) _page=pages;
   const slice=hasil.slice((_page-1)*PER,_page*PER);
@@ -1393,7 +1448,7 @@ function renderList(){
       <div style="min-width:0"><div class="fnm" title="${escH(f.nama)}">${escH(f.nama)}</div><div class="fmt2">ArsipCloud Storage</div>${tagChipsHtml(f.tags,3)}</div>
       <div class="fdt">${fTgl(f.tgl)}</div>
       <div class="fsz">${f.ukuran}</div>
-      <div><span class="badge bdrv2">ArsipCloud</span></div>
+      <div>${tagColHtml(f.tags)}</div>
       <div class="aksi" onclick="event.stopPropagation()">
         <button class="bsm bbuk" onclick="openPreview('${f.id}')" title="Preview">&#128065;</button>
         <a href="${f.dl}" target="_blank" class="bsm bund" onclick="logDl('${escA(f.nama)}')">&#8595;</a>
@@ -1415,7 +1470,26 @@ function renderList(){
   const chkAll=document.getElementById('chkAll');if(chkAll) chkAll.checked=slice.length>0&&slice.every(f=>_selected.has(f.id));
 }
 
-function setJenis(el,j){document.querySelectorAll('.pills .pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');_jenis=j;_page=1;renderList();}
+function filterByDate(iso){
+  _dateF=(_dateF===iso)?null:iso;
+  _page=1;renderList();
+}
+function clearDateFilter(){_dateF=null;_page=1;renderList();}
+function renderDateChip(){
+  const chip=document.getElementById('dateFChip');if(!chip) return;
+  if(_dateF){
+    chip.style.display='inline-flex';
+    chip.innerHTML=`&#128197; Tanggal: ${fTgl(_dateF)} <button onclick="clearDateFilter()" title="Hapus filter tanggal">&#10005;</button>`;
+  }else{
+    chip.style.display='none';chip.innerHTML='';
+  }
+}
+function setJenis(el,j){
+  document.querySelectorAll('.pills .pill').forEach(p=>p.classList.remove('active'));
+  const target=el||document.querySelector(`.pills .pill[data-j="${j}"]`);
+  if(target) target.classList.add('active');
+  _jenis=j;_page=1;renderList();
+}
 function doFilter(){_page=1;renderList();}
 
 // ═══════════════════════════════════
@@ -1426,14 +1500,7 @@ function toggleSelect(id,checked){
   renderList();
 }
 function toggleSelectAll(checked){
-  const kata=document.getElementById('inpCari').value.toLowerCase();
-  const srt=document.getElementById('srtBy').value;
-  let hasil=_files.filter(f=>{
-    const jenisOk=_jenis==='semua'||f.jenis===_jenis;
-    const tagOk=_tagF==='semua'||(f.tags||[]).includes(_tagF);
-    const kataOk=!kata||f.nama.toLowerCase().includes(kata)||(f.tags||[]).some(t=>t.toLowerCase().includes(kata));
-    return jenisOk&&tagOk&&kataOk;
-  });
+  const hasil=_filteredFiles&&_filteredFiles.length?_filteredFiles:_files;
   const slice=hasil.slice((_page-1)*PER,_page*PER);
   slice.forEach(f=>{if(checked) _selected.add(f.id); else _selected.delete(f.id);});
   renderList();
@@ -1485,6 +1552,49 @@ function onFileSelect(){
     document.getElementById('fSelNm').textContent=`${files.length} file dipilih (${fBytes(totalSz)})`;
   }
   document.getElementById('fSelInfo').classList.add('on');
+}
+
+// ═══════════════════════════════════
+// DRAG & DROP UPLOAD
+// ═══════════════════════════════════
+function initDropZone(){
+  const zone=document.getElementById('upZone');
+  const inp=document.getElementById('inpFile');
+  const ico=document.getElementById('upIco');
+  const title=document.getElementById('upTitle');
+  if(!zone||!inp) return;
+  const setDragUI=(on)=>{
+    zone.classList.toggle('dragover',on);
+    if(ico) ico.innerHTML=on?'&#128229;':'&#9729;';
+    if(title) title.textContent=on?'Lepas untuk mengunggah':'Pilih atau Seret File';
+  };
+  ['dragenter','dragover'].forEach(ev=>zone.addEventListener(ev,e=>{
+    e.preventDefault();e.stopPropagation();
+    if(!zone.classList.contains('off')) setDragUI(true);
+  }));
+  ['dragleave','dragend'].forEach(ev=>zone.addEventListener(ev,e=>{
+    e.preventDefault();e.stopPropagation();
+    if(e.type==='dragleave'&&zone.contains(e.relatedTarget)) return;
+    setDragUI(false);
+  }));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();e.stopPropagation();
+    setDragUI(false);
+    if(zone.classList.contains('off')){toast('&#128274; Hubungkan ArsipCloud dan login sebagai Admin/Operator dulu.','e');return;}
+    const dtFiles=e.dataTransfer?.files;
+    if(!dtFiles||!dtFiles.length) return;
+    try{
+      inp.files=dtFiles;
+      onFileSelect();
+      toast(`&#10003; ${dtFiles.length} file siap diunggah &#8212; lengkapi info di bawah.`,'s');
+    }catch(err){
+      toast('&#9888; Browser tidak mendukung drag-drop, silakan klik untuk pilih file.','e');
+    }
+  });
+  // cegah browser membuka file jika ter-drop di luar zona (mis. area kosong halaman)
+  ['dragover','drop'].forEach(ev=>window.addEventListener(ev,e=>{
+    if(!zone.contains(e.target)) e.preventDefault();
+  }));
 }
 
 async function uploadSatuFile(file,upl,kat,catatan,tags){
@@ -1622,18 +1732,32 @@ function openPreview(id){
 function eksporCSV(){
   if(!canExp()){toast('&#9940; Role ini tidak dapat mengekspor.','e');return;}
   if(!_files.length){toast('&#9888; Tidak ada data','e');return;}
+  const data=_filteredFiles&&_filteredFiles.length?_filteredFiles:_files;
+  if(!data.length){toast('&#9888; Tidak ada data pada filter saat ini','e');return;}
+  const filterAktif=_jenis!=='semua'||_tagF!=='semua'||(document.getElementById('inpCari').value||'').trim()!=='';
   const hdr=['No','Nama File','Jenis','Ukuran','Tanggal','Pengunggah','Kategori','Tag','Link'];
-  const rows=_files.map((f,i)=>[i+1,`"${f.nama}"`,f.jenis,f.ukuran,fTgl(f.tgl),`"${f.pengunggah||''}"`,`"${f.kategori||''}"`,`"${(f.tags||[]).join('; ')}"`,f.link]);
+  const rows=data.map((f,i)=>[i+1,`"${f.nama}"`,f.jenis,f.ukuran,fTgl(f.tgl),`"${f.pengunggah||''}"`,`"${f.kategori||''}"`,`"${(f.tags||[]).join('; ')}"`,f.link]);
   const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
-  a.download='arsip-polkeslu.csv';a.click();toast('&#8595; CSV diunduh!','s');
+  a.download=filterAktif?'arsip-polkeslu-filter.csv':'arsip-polkeslu.csv';a.click();
+  toast(filterAktif?`&#8595; CSV diunduh! (${data.length} file sesuai filter)`:'&#8595; CSV diunduh!','s');
 }
 
 // ═══════════════════════════════════
 // CHARTS
 // ═══════════════════════════════════
 let _cJ=null,_cM=null;
+// Bangun 7 hari terakhir (hari ini + 6 hari sebelumnya) berdasarkan tanggal asli, bukan asumsi Sen-Min
+function last7Days(){
+  const dayLabels=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  const out=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);
+    out.push({iso:d.toISOString().split('T')[0],label:dayLabels[d.getDay()],isToday:i===0});
+  }
+  return out;
+}
 function updChart(){
   const dk=document.documentElement.getAttribute('data-theme')==='dark';
   const tc=dk?'rgba(255,255,255,.5)':'rgba(0,0,0,.4)';
@@ -1642,17 +1766,37 @@ function updChart(){
   const jL=Object.keys(jM).length?Object.keys(jM):['Kosong'];
   const jD=Object.keys(jM).length?Object.values(jM):[1];
   const jC=['#b5884a','#5c8c78','#7b8fc0','#c07b7b','#e8a838','#a06bbd','#4a9fb5'];
-  const cfJ={type:'doughnut',data:{labels:jL,datasets:[{data:jD,backgroundColor:jC,borderWidth:2,borderColor:dk?'#1e1e22':'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'right',labels:{boxWidth:10,font:{size:11},color:tc}}}}};
+  const totalJ=_files.length;
+  const cfJ={type:'doughnut',data:{labels:jL,datasets:[{data:jD,backgroundColor:jC,borderWidth:2,borderColor:dk?'#1e1e22':'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',onClick:(evt,els)=>{if(!els.length) return;const idx=els[0].index;const lbl=jL[idx];if(lbl&&lbl!=='Kosong') setJenis(null,lbl);},plugins:{legend:{position:'right',labels:{boxWidth:10,padding:10,font:{size:11},color:tc}},tooltip:{callbacks:{label:(ctx)=>{const v=ctx.parsed;const pct=totalJ?((v/totalJ)*100).toFixed(1):0;return ` ${ctx.label}: ${v} file (${pct}%) — klik untuk filter`;}}}}}};
   if(_cJ){_cJ.data=cfJ.data;_cJ.options.plugins.legend.labels.color=tc;_cJ.update();}
   else _cJ=new Chart(document.getElementById('cJenis'),cfJ);
-  const cfM={type:'bar',data:{labels:['Sen','Sel','Rab','Kam','Jum','Sab','Min'],datasets:[{label:'File',data:[0,0,0,0,0,0,_files.length],backgroundColor:'rgba(181,136,74,.2)',borderColor:'rgba(181,136,74,.8)',borderWidth:2,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gc},ticks:{color:tc,font:{size:11}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:11},stepSize:1},beginAtZero:true}}}};
+
+  // Hitung jumlah file per hari secara riil dari tanggal (f.tgl), bukan ditumpuk di hari terakhir
+  const days=last7Days();
+  const wLabels=days.map(d=>d.label);
+  const wData=days.map(d=>_files.filter(f=>f.tgl===d.iso).length);
+  const wBg=days.map(d=>(d.iso===_dateF||(!_dateF&&d.isToday))?'rgba(181,136,74,.75)':'rgba(181,136,74,.22)');
+  const wBd=days.map(d=>(d.iso===_dateF||(!_dateF&&d.isToday))?'rgba(181,136,74,1)':'rgba(181,136,74,.8)');
+  const cfM={type:'bar',data:{labels:wLabels,datasets:[{label:'File diunggah',data:wData,backgroundColor:wBg,borderColor:wBd,borderWidth:2,borderRadius:5,maxBarThickness:34}]},options:{responsive:true,maintainAspectRatio:false,onClick:(evt,els)=>{if(!els.length) return;const idx=els[0].index;filterByDate(days[idx].iso);},plugins:{legend:{display:false},tooltip:{callbacks:{title:(items)=>days[items[0].dataIndex].iso,label:(ctx)=>` ${ctx.parsed.y} file — klik untuk filter`}}},scales:{x:{grid:{color:gc},ticks:{color:tc,font:{size:11}}},y:{grid:{color:gc},ticks:{color:tc,font:{size:11},stepSize:1,precision:0},beginAtZero:true}}}};
   if(_cM){_cM.data=cfM.data;['x','y'].forEach(ax=>{_cM.options.scales[ax].grid.color=gc;_cM.options.scales[ax].ticks.color=tc;});_cM.update();}
   else _cM=new Chart(document.getElementById('cMgg'),cfM);
 }
 function drawSparks(){
   const cols=['#b5884a','#5c8c78','#c07b7b','#7b8fc0'];
-  const n=_files.length;
-  [[0,0,0,0,0,0,n],[3,3,3,3,3,3,3],[0,0,0,0,0,0,_newCt],[0,0,0,0,0,0,Math.max(1,Math.round(n*.1))]].forEach((d,i)=>{
+  const days=last7Days();
+  // sp1: tren jumlah file diunggah per hari (7 hari terakhir) — data riil
+  const uploadTrend=days.map(d=>_files.filter(f=>f.tgl===d.iso).length);
+  // sp2: pertumbuhan kategori unik yang sudah pernah muncul s/d hari itu — data riil
+  const seenKat=new Set();
+  const katTrend=days.map(d=>{
+    _files.filter(f=>f.tgl===d.iso&&f.kategori).forEach(f=>seenKat.add(f.kategori));
+    return seenKat.size;
+  });
+  // sp3: file yang benar-benar diunggah hari ini (tanggal asli), disorot di hari terakhir
+  const todayTrend=days.map((d,i)=>i===days.length-1?_files.filter(f=>f.tgl===d.iso).length:0);
+  // sp4: total ukuran (bytes) yang diunggah per hari — data riil
+  const sizeTrend=days.map(d=>_files.filter(f=>f.tgl===d.iso).reduce((s,f)=>s+(f.bytes||0),0));
+  [uploadTrend,katTrend,todayTrend,sizeTrend].forEach((d,i)=>{
     const el=document.getElementById(`sp${i+1}`);if(!el) return;
     const mx=Math.max(...d)||1;
     el.innerHTML=d.map((v,j)=>`<div class="spk" style="height:${Math.max(3,Math.round((v/mx)*24))}px;background:${cols[i]};opacity:${j===d.length-1?'.85':'.15'}"></div>`).join('');
@@ -1770,8 +1914,15 @@ if(localStorage.getItem('arsipTheme')==='dark'){document.documentElement.setAttr
 // ═══════════════════════════════════
 const HN=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 const BN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-const N=new Date();
-document.getElementById('tglHari').textContent=HN[N.getDay()]+', '+N.getDate()+' '+BN[N.getMonth()]+' '+N.getFullYear();
+function tickClock(){
+  const n=new Date();
+  const tglEl=document.getElementById('tglHari');
+  if(tglEl) tglEl.textContent=HN[n.getDay()]+', '+n.getDate()+' '+BN[n.getMonth()]+' '+n.getFullYear();
+  const jamEl=document.getElementById('jamRT');
+  if(jamEl) jamEl.textContent=n.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+tickClock();
+setInterval(tickClock,1000);
 window.addEventListener('scroll',()=>document.getElementById('stBtn').classList.toggle('on',scrollY>300));
 function scrollUp(){document.getElementById('upSec').scrollIntoView({behavior:'smooth'});}
 
@@ -1827,7 +1978,7 @@ function subscribeRealtime(){
   const ci=document.getElementById('cidInp'),ki=document.getElementById('keyInp');
   if(_cid&&ci) ci.value=_cid;
   if(_key&&ki) ki.value=_key;
-  runDiag();updChart();drawSparks();
+  runDiag();updChart();drawSparks();initDropZone();
 })();
 </script>
 </body>
